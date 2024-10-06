@@ -1,0 +1,90 @@
+@startuml Diagrama de classes
+left to right direction
+
+enum TipoUsuario {
+    ALUNO
+    PROFESSOR
+    EMPRESA
+}
+
+class Usuario {
+    - id: int
+    - nome: string
+    - email: string
+    - senha: string
+    - tipo: TipoUsuario
+}
+
+class Aluno {
+    - cpf: string
+    - rg: string
+    - endereco: string
+    - instituicao: Instituicao
+    - curso: string
+    - saldoMoedas: int
+}
+
+class Professor {
+    - cpf: string
+    - departamento: string
+    - saldoMoedas: int
+    - instituicao: Instituicao
+}
+
+class Empresa {
+    - cnpj: string
+    - saldoMoedas: int
+    - vantagens: List<Vantagem>
+}
+
+class Instituicao {
+    - id: int
+    - nome: string
+    - endereco: string
+}
+
+class Vantagem {
+    - id: int
+    - descricao: string
+    - foto: string
+    - custoMoedas: int
+    - empresa: Empresa
+}
+
+class CupomResgate {
+    - id: int
+    - codigo: String
+    - aluno: Aluno
+    - vantagem: Vantagem
+    - empresa: Empresa
+}
+
+class Transacao {
+    - id: int
+    - data: Date
+    - valor: int
+    - origem: Usuario
+    - destino: Usuario
+    - descricao: String
+}
+
+Usuario <|-- Aluno
+Usuario <|-- Professor
+Usuario <|-- Empresa
+
+Aluno "*" -- "1" Instituicao : estuda em >
+Professor "*" -- "1" Instituicao : trabalha em >
+
+Empresa "1" -- "0..*" Vantagem : oferece >
+
+Aluno "1" -- "*" Vantagem : resgata >
+Aluno "1" -- "*" CupomResgate : possui >
+Empresa "1" -- "*" CupomResgate : verifica >
+
+Professor "1" -- "*" Transacao : realiza >
+Aluno "1" -- "*" Transacao : recebe >
+
+Vantagem "1" -- "1" Empresa : oferecida por >
+Vantagem "1" -- "*" CupomResgate : associada a >
+
+@enduml
