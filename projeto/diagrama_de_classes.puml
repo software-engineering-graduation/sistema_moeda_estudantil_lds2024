@@ -65,7 +65,7 @@ class Transacao {
     - valor: int
     - origem: Usuario
     - destino: Usuario
-    - descricao: String
+    - mensagem: String
 }
 
 Usuario <|-- Aluno

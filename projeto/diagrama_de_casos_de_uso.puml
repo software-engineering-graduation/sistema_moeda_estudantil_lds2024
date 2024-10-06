@@ -1,4 +1,45 @@
 @startuml Diagrama de Casos de Uso
 left to right direction
 
+actor "Aluno" as aluno
+actor "Professor" as professor
+actor "Empresa" as empresa
+
+rectangle "Sistema de Moeda Estudantil" {
+    usecase "Realizar cadastro" as uc_cadastro
+    usecase "Distribuir moedas" as uc_distribuir_moedas
+    usecase "Notificar moedas recebidas" as uc_notificar_moedas
+    usecase "Consultar extrato" as uc_extrato
+    usecase "Cadastro de vantagem" as uc_cadastro_vantagem
+    usecase "Resgatar vantagem" as uc_resgatar_vantagem
+    usecase "Emitir cupom de resgate" as uc_emitir_cupom
+}
+
+aluno -- uc_cadastro
+aluno -- uc_extrato
+aluno -- uc_resgatar_vantagem
+
+professor -- uc_cadastro
+professor -- uc_extrato
+professor -- uc_distribuir_moedas
+
+empresa -- uc_cadastro
+empresa -- uc_cadastro_vantagem
+
+' Every use case uses depends on the "Realizar cadastro" use case
+uc_distribuir_moedas ..> uc_cadastro : <<include>>
+uc_extrato ..> uc_cadastro : <<include>>
+uc_cadastro_vantagem ..> uc_cadastro : <<include>>
+uc_resgatar_vantagem ..> uc_cadastro : <<include>>
+
+uc_emitir_cupom ..> uc_resgatar_vantagem : <<include>>
+uc_notificar_moedas ..> uc_distribuir_moedas : <<extend>>
+
+' Cupom is sent to the student and company
+uc_emitir_cupom --> aluno
+uc_emitir_cupom --> empresa
+
+' Notification is sent to the student
+uc_notificar_moedas --> aluno
+
 @enduml
