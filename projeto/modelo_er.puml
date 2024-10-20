@@ -1,0 +1,104 @@
+@startuml Modelo Entidade Relacionamento
+
+entity "Usuario" as user {
+  * id: int (PK)
+  --
+  * nome: string
+  * email: string
+  * senha: string
+  * tipo: enum(Empresa, Aluno, Professor)
+}
+
+entity "Aluno" as student {
+  * id: int (PK)
+  * usuario_id: int (FK)
+  * instituicao_id: int (FK)
+  --
+  * cpf: string
+  * rg: string
+  * endereco: string
+  * curso: string
+  * saldoMoedas: BigDecimal
+}
+
+entity "Professor" as teacher {
+  * id: int (PK)
+  * usuario_id: int (FK)
+  * instituicao_id: int (FK)
+  --
+  * cpf: string
+  * departamento: string
+  * saldoMoedas: BigDecimal
+}
+
+entity "Funcionario_Empresa" as companyEmployee {
+  * id: int (PK)
+  * usuario_id: int (FK)
+  * empresa_id: int (FK)
+  --
+}
+
+' ---
+
+entity "Instituicao" as institution {
+  * id: int (PK)
+  --
+  * nome: string
+  * endereco: string
+}
+
+entity "Empresa" as company {
+  * id: int (PK)
+  --
+  * cnpj: string
+}
+
+entity "Vantagem" as advantage {
+  * id: int (PK)
+  * empresa_id: int (FK)
+  --
+  * custoMoedas: BigDecimal
+  descricao: string
+  foto: string
+  quantidade_disponivel: int
+}
+
+entity "Cupom_Resgate" as redemptionCoupon {
+  * id: int (PK)
+  * aluno_id: int (FK)
+  * vantagem_id: int (FK)
+  --
+  * codigo: string
+  * valor: BigDecimal
+}
+
+entity "Transacao" as transaction {
+  * id: int (PK)
+  * professor_id: int (FK)
+  * aluno_id: int (FK)
+  --
+  * data: Date
+  * valor: BigDecimal
+  * mensagem: string
+}
+
+' ---
+
+user ||--|| student
+user ||--|| teacher
+user ||-r-|| companyEmployee
+
+institution ||-u-|{ teacher
+institution ||-u-|{ student
+
+transaction }o-r-|| student
+transaction }o-l-|| teacher
+
+company ||--|{ advantage
+company ||-l-|{ companyEmployee
+
+advantage ||--|| redemptionCoupon
+
+student ||--o{ redemptionCoupon
+
+@enduml

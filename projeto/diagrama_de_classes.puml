@@ -49,6 +49,7 @@ class Vantagem {
     - foto: string
     - custoMoedas: int
     - empresa: Empresa
+    - quantidadeDisponivel: int
 }
 
 class CupomResgate {
@@ -57,6 +58,7 @@ class CupomResgate {
     - aluno: Aluno
     - vantagem: Vantagem
     - empresa: Empresa
+    - valor: int
 }
 
 class Transacao {
