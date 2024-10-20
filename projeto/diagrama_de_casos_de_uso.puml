@@ -35,7 +35,6 @@ admin -- uc_pre_cadastro_professor
 ' Every use case uses depends on the "Realizar cadastro" use case
 uc_distribuir_moedas ..> uc_cadastro : <<include>>
 uc_extrato ..> uc_cadastro : <<include>>
-uc_cadastro_vantagem ..> uc_cadastro : <<include>>
 uc_resgatar_vantagem ..> uc_cadastro : <<include>>
 
 uc_emitir_cupom ..> uc_resgatar_vantagem : <<include>>
