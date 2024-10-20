@@ -97,7 +97,7 @@ transaction }o-l-|| teacher
 company ||--|{ advantage
 company ||-l-|{ companyEmployee
 
-advantage ||--|| redemptionCoupon
+advantage ||--o{ redemptionCoupon
 
 student ||--o{ redemptionCoupon
 
