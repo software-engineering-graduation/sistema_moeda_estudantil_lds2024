@@ -4,6 +4,7 @@ left to right direction
 actor "Aluno" as aluno
 actor "Professor" as professor
 actor "Empresa" as empresa
+actor "Administrador" as admin
 
 rectangle "Sistema de Moeda Estudantil" {
     usecase "Realizar cadastro" as uc_cadastro
@@ -13,6 +14,8 @@ rectangle "Sistema de Moeda Estudantil" {
     usecase "Cadastro de vantagem" as uc_cadastro_vantagem
     usecase "Resgatar vantagem" as uc_resgatar_vantagem
     usecase "Emitir cupom de resgate" as uc_emitir_cupom
+    usecase "Cadastrar instituição" as uc_cadastrar_instituicao
+    usecase "Pré-cadastrar professor" as uc_pre_cadastro_professor 
 }
 
 aluno -- uc_cadastro
@@ -25,6 +28,9 @@ professor -- uc_distribuir_moedas
 
 empresa -- uc_cadastro
 empresa -- uc_cadastro_vantagem
+
+admin -- uc_cadastrar_instituicao
+admin -- uc_pre_cadastro_professor
 
 ' Every use case uses depends on the "Realizar cadastro" use case
 uc_distribuir_moedas ..> uc_cadastro : <<include>>
@@ -41,5 +47,11 @@ uc_emitir_cupom --> empresa
 
 ' Notification is sent to the student
 uc_notificar_moedas --> aluno
+
+'Apenas professor precisa de pré cadastro, por isso a escolha pelo extend
+uc_cadastro --> uc_pre_cadastro_professor : <<extend>>
+
+'Apenas alunos e professores precisam estar relacionados a instituição, por isso a escolha pelo extend
+uc_cadastrar_instituicao <-- uc_cadastro : <<extend>>
 
 @enduml
