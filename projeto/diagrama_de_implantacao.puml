@@ -1,0 +1,30 @@
+@startuml
+node "Máquina do usuário <<device >>" as frontend{
+    node "Navegador Web\n(Alunos, Professores, Empresas)" as Users
+}
+
+node "Vercel <<cloud>>" as servidorFrontend {
+    [Frontend Host]
+}
+
+node "Servidor da solução <<device >>" as servidorDaSolucao {
+
+    node "Servidor Aplicação" as servidorDaAplicacao{
+        [Spring Boot Application] as SpringBoot
+    }
+
+    node "Banco de Dados" as bancoDeDados{
+        [PostgreSQL] as Postgres
+    }
+
+    node "Serviço de Email" as servicoDeEmail{
+        [MailHog] as MailHog
+    }
+}
+
+' Relacionamentos entre Componentes
+frontend -- servidorFrontend : TCP/IP
+frontend -- servidorDaSolucao: TCP/IP
+servidorDaAplicacao-- bancoDeDados: TCP/IP
+servidorDaAplicacao -- servicoDeEmail: TCP/IP
+@enduml
