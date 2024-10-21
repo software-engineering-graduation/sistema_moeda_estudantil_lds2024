@@ -6,6 +6,7 @@ import StudentList from './components/StudentList'
 import CompanyList from './components/CompanyList'
 import StudentForm from './components/StudentForm'
 import CompanyForm from './components/CompanyForm'
+import { Toaster } from './components/ui/toaster'
 
 const queryClient = new QueryClient()
 
@@ -18,25 +19,26 @@ export default function App() {
             <nav className="container mx-auto px-4 py-4">
               <ul className="flex space-x-4">
                 <li><Link to="/"><Button>Home</Button></Link></li>
-                <li><Link to="/students"><Button>Students</Button></Link></li>
-                <li><Link to="/companies"><Button>Companies</Button></Link></li>
+                <li><Link to="/alunos"><Button>Alunos</Button></Link></li>
+                <li><Link to="/empresas"><Button>Empresas</Button></Link></li>
               </ul>
             </nav>
           </header>
           <main className="container mx-auto px-4 py-8">
             <Routes>
               <Route path="/" element={<h1 className="text-4xl font-bold">Welcome to Student Currency System</h1>} />
-              <Route path="/students" element={<StudentList />} />
-              <Route path="/students/new" element={<StudentForm />} />
-              <Route path="/students/:id" element={<StudentForm />} />
-              <Route path="/companies" element={<CompanyList />} />
-              <Route path="/companies/new" element={<CompanyForm />} />
-              <Route path="/companies/:id" element={<CompanyForm />} />
+              <Route path="/alunos" element={<StudentList />} />
+              <Route path="/alunos/novo" element={<StudentForm />} />
+              <Route path="/alunos/:id" element={<StudentForm />} />
+              <Route path="/empresas" element={<CompanyList />} />
+              <Route path="/empresas/nova" element={<CompanyForm />} />
+              <Route path="/empresas/:id" element={<CompanyForm />} />
             </Routes>
           </main>
         </div>
       </Router>
       <ReactQueryDevtools initialIsOpen={false} />
+      <Toaster />
     </QueryClientProvider>
   )
 }

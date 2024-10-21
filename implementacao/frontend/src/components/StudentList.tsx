@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 import {
     createColumnHelper,
@@ -15,8 +15,9 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table'
+import axios from 'axios'
 
-interface Student {
+interface Aluno {
     id: number
     nome: string
     email: string
@@ -25,27 +26,36 @@ interface Student {
     saldoMoedas: number
 }
 
-const fetchStudents = async (): Promise<Student[]> => {
-    const response = await fetch('http://localhost:8080/alunos')
-    if (!response.ok) {
-        throw new Error('Network response was not ok')
-    }
-    return response.json()
+const buscarAlunos = async (): Promise<Aluno[]> => {
+    const { data } = await axios.get('http://localhost:8080/alunos')
+    return data
 }
 
-const columnHelper = createColumnHelper<Student>()
+const excluirAluno = async (id: number): Promise<void> => {
+    await axios.delete(`http://localhost:8080/alunos/${id}`)
+}
 
-export default function StudentList() {
+const columnHelper = createColumnHelper<Aluno>()
+
+export default function ListaAlunos() {
     const navigate = useNavigate()
+    const queryClient = useQueryClient()
+
+    const excluirMutacao = useMutation<void, Error, number>({
+        mutationFn: excluirAluno,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['alunos'] })
+        },
+    })
 
     const columns = [
         columnHelper.accessor('nome', {
             cell: info => info.getValue(),
-            header: () => <span>Name</span>,
+            header: () => <span>Nome</span>,
         }),
         columnHelper.accessor('email', {
             cell: info => info.getValue(),
-            header: () => <span>Email</span>,
+            header: () => <span>E-mail</span>,
         }),
         columnHelper.accessor('cpf', {
             cell: info => info.getValue(),
@@ -53,40 +63,52 @@ export default function StudentList() {
         }),
         columnHelper.accessor('curso', {
             cell: info => info.getValue(),
-            header: () => <span>Course</span>,
+            header: () => <span>Curso</span>,
         }),
         columnHelper.accessor('saldoMoedas', {
             cell: info => info.getValue(),
-            header: () => <span>Balance</span>,
+            header: () => <span>Saldo de Moedas</span>,
         }),
         columnHelper.accessor('id', {
             cell: info => (
-                <Button onClick={() => navigate(`/students/${info.getValue()}`)}>
-                    Edit
-                </Button>
+                <div className="space-x-2">
+                    <Button onClick={() => navigate(`/alunos/${info.getValue()}`)}>
+                        Editar
+                    </Button>
+                    <Button 
+                        variant="destructive" 
+                        onClick={() => {
+                            if (window.confirm('Tem certeza que deseja excluir este aluno?')) {
+                                excluirMutacao.mutate(info.getValue())
+                            }
+                        }}
+                    >
+                        Excluir
+                    </Button>
+                </div>
             ),
-            header: () => <span>Actions</span>,
+            header: () => <span>Ações</span>,
         }),
     ]
 
-    const { data: students = [], isLoading, error } = useQuery<Student[], Error>({
-        queryKey: ['students'],
-        queryFn: fetchStudents,
+    const { data: alunos = [], isLoading, error } = useQuery<Aluno[], Error>({
+        queryKey: ['alunos'],
+        queryFn: buscarAlunos,
     })
 
     const table = useReactTable({
-        data: students,
+        data: alunos,
         columns,
         getCoreRowModel: getCoreRowModel(),
     })
 
-    if (isLoading) return <div>Loading...</div>
-    if (error) return <div>An error occurred: {error.message}</div>
+    if (isLoading) return <div>Carregando...</div>
+    if (error) return <div>Ocorreu um erro: {error.message}</div>
 
     return (
         <div>
-            <h1 className="text-3xl font-bold mb-4">Students</h1>
-            <Button onClick={() => navigate('/students/new')} className="mb-4">Add New Student</Button>
+            <h1 className="text-3xl font-bold mb-4">Alunos</h1>
+            <Button onClick={() => navigate('/alunos/novo')} className="mb-4">Adicionar Novo Aluno</Button>
             <Table>
                 <TableHeader>
                     {table.getHeaderGroups().map(headerGroup => (

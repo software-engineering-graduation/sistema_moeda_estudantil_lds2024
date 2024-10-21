@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 import {
     createColumnHelper,
@@ -15,8 +15,10 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table'
+import axios from 'axios'
+import { useToast } from "@/hooks/use-toast"
 
-interface Company {
+interface Empresa {
     id: number
     nome: string
     email: string
@@ -24,23 +26,44 @@ interface Company {
     saldoMoedas: number
 }
 
-const fetchCompanies = async (): Promise<Company[]> => {
-    const response = await fetch('http://localhost:8080/empresas')
-    if (!response.ok) {
-        throw new Error('Network response was not ok')
-    }
-    return response.json()
+const buscarEmpresas = async (): Promise<Empresa[]> => {
+    const { data } = await axios.get('http://localhost:8080/empresas')
+    return data
 }
 
-const columnHelper = createColumnHelper<Company>()
+const excluirEmpresa = async (id: number): Promise<void> => {
+    await axios.delete(`http://localhost:8080/empresas/${id}`)
+}
 
-export default function CompanyList() {
+const columnHelper = createColumnHelper<Empresa>()
+
+export default function ListaEmpresas() {
+    const { toast } = useToast()
     const navigate = useNavigate()
+    const queryClient = useQueryClient()
+
+    const excluirMutacao = useMutation({
+        mutationFn: excluirEmpresa,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['empresas'] })
+            toast({
+                title: "Sucesso",
+                description: "Empresa excluída com sucesso!",
+            })
+        },
+        onError: (error) => {
+            toast({
+                title: "Erro",
+                description: `Erro ao excluir empresa: ${(error as Error).message}`,
+                variant: "destructive",
+            })
+        },
+    })
 
     const columns = [
         columnHelper.accessor('nome', {
             cell: info => info.getValue(),
-            header: () => <span>Name</span>,
+            header: () => <span>Nome</span>,
         }),
         columnHelper.accessor('email', {
             cell: info => info.getValue(),
@@ -52,36 +75,48 @@ export default function CompanyList() {
         }),
         columnHelper.accessor('saldoMoedas', {
             cell: info => info.getValue(),
-            header: () => <span>Balance</span>,
+            header: () => <span>Saldo de Moedas</span>,
         }),
         columnHelper.accessor('id', {
             cell: info => (
-                <Button onClick={() => navigate(`/companies/${info.getValue()}`)}>
-                    Edit
-                </Button>
+                <div className="space-x-2">
+                    <Button onClick={() => navigate(`/empresas/${info.getValue()}`)}>
+                        Editar
+                    </Button>
+                    <Button
+                        variant="destructive"
+                        onClick={() => {
+                            if (window.confirm('Tem certeza que deseja excluir esta empresa?')) {
+                                excluirMutacao.mutate(info.getValue())
+                            }
+                        }}
+                    >
+                        Excluir
+                    </Button>
+                </div>
             ),
-            header: () => <span>Actions</span>,
+            header: () => <span>Ações</span>,
         }),
     ]
 
-    const { data: companies = [], isLoading, error } = useQuery<Company[]>({
-        queryKey: ['companies'],
-        queryFn: fetchCompanies,
+    const { data: empresas = [], isLoading, error } = useQuery<Empresa[], Error>({
+        queryKey: ['empresas'],
+        queryFn: buscarEmpresas,
     })
 
     const table = useReactTable({
-        data: companies,
+        data: empresas,
         columns,
         getCoreRowModel: getCoreRowModel(),
     })
 
-    if (isLoading) return <div>Loading...</div>
-    if (error) return <div>An error occurred: {(error as Error).message}</div>
+    if (isLoading) return <div>Carregando...</div>
+    if (error) return <div>Ocorreu um erro: {error.message}</div>
 
     return (
         <div>
-            <h1 className="text-3xl font-bold mb-4">Companies</h1>
-            <Button onClick={() => navigate('/companies/new')} className="mb-4">Add New Company</Button>
+            <h1 className="text-3xl font-bold mb-4">Empresas</h1>
+            <Button onClick={() => navigate('/empresas/nova')} className="mb-4">Adicionar Nova Empresa</Button>
             <Table>
                 <TableHeader>
                     {table.getHeaderGroups().map(headerGroup => (

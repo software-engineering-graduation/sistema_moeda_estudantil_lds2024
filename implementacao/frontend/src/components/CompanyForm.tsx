@@ -4,8 +4,10 @@ import { Label } from '@/components/ui/label'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import axios from 'axios'
+import { useToast } from "@/hooks/use-toast"
 
-interface Company {
+interface Empresa {
     id?: number
     nome: string
     email: string
@@ -13,117 +15,119 @@ interface Company {
     cnpj: string
 }
 
-const fetchCompany = async (id: string): Promise<Company> => {
-    const response = await fetch(`http://localhost:8080/empresas/${id}`)
-    if (!response.ok) {
-        throw new Error('Network response was not ok')
-    }
-    return response.json()
+const buscarEmpresa = async (id: string): Promise<Empresa> => {
+    const { data } = await axios.get(`http://localhost:8080/empresas/${id}`)
+    return data
 }
 
-const createCompany = async (company: Company): Promise<Company> => {
-    const response = await fetch('http://localhost:8080/empresas', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(company),
-    })
-    if (!response.ok) {
-        throw new Error('Network response was not ok')
-    }
-    return response.json()
+const criarEmpresa = async (empresa: Empresa): Promise<Empresa> => {
+    const { data } = await axios.post('http://localhost:8080/empresas', empresa)
+    return data
 }
 
-const updateCompany = async (company: Company): Promise<Company> => {
-    const response = await fetch(`http://localhost:8080/empresas/${company.id}`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(company),
-    })
-    if (!response.ok) {
-        throw new Error('Network response was not ok')
-    }
-    return response.json()
+const atualizarEmpresa = async (empresa: Empresa): Promise<Empresa> => {
+    const { data } = await axios.put(`http://localhost:8080/empresas/${empresa.id}`, empresa)
+    return data
 }
 
-export default function CompanyForm() {
+export default function FormularioEmpresa() {
+    const { toast } = useToast()
     const { id } = useParams<{ id: string }>()
     const navigate = useNavigate()
     const queryClient = useQueryClient()
-    const [company, setCompany] = useState<Company>({
+    const [empresa, setEmpresa] = useState<Empresa>({
         nome: '',
         email: '',
         senha: '',
         cnpj: '',
     })
 
-    const { isLoading: isFetchingCompany, data } = useQuery<Company, Error>({
-        queryKey: ['company', id],
-        queryFn: () => fetchCompany(id!),
+    const { isLoading: estaCarregandoEmpresa, data } = useQuery<Empresa, Error>({
+        queryKey: ['empresa', id],
+        queryFn: () => buscarEmpresa(id!),
         enabled: !!id,
     })
 
     useEffect(() => {
         if (data) {
-            setCompany(data)
+            setEmpresa(data)
         }
     }, [data])
 
-    const createMutation = useMutation({
-        mutationFn: createCompany,
+    const criarMutacao = useMutation({
+        mutationFn: criarEmpresa,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['companies'] })
-            navigate('/companies')
+            queryClient.invalidateQueries({ queryKey: ['empresas'] })
+            navigate('/empresas')
+            toast({
+                title: "Sucesso",
+                description: "Empresa criada com sucesso!",
+            })
+        },
+        onError: (error) => {
+            toast({
+                title: "Erro",
+                description: `Erro ao criar empresa: ${(error as Error).message}`,
+                variant: "destructive",
+            })
         },
     })
 
-    const updateMutation = useMutation({
-        mutationFn: updateCompany,
+    const atualizarMutacao = useMutation({
+        mutationFn: atualizarEmpresa,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['companies'] })
-            navigate('/companies')
+            queryClient.invalidateQueries({ queryKey: ['empresas'] })
+            navigate('/empresas')
+            toast({
+                title: "Sucesso",
+                description: "Empresa atualizada com sucesso!",
+            })
+        },
+        onError: (error) => {
+            toast({
+                title: "Erro",
+                description: `Erro ao atualizar empresa: ${(error as Error).message}`,
+                variant: "destructive",
+            })
         },
     })
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
         if (id) {
-            updateMutation.mutate(company)
+            atualizarMutacao.mutate(empresa)
         } else {
-            createMutation.mutate(company)
+            criarMutacao.mutate(empresa)
         }
     }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
-        setCompany(prev => ({ ...prev, [name]: value }))
+        setEmpresa(prev => ({ ...prev, [name]: value }))
     }
 
-    if (isFetchingCompany) return <div>Loading...</div>
+    if (estaCarregandoEmpresa) return <div>Carregando...</div>
 
     return (
         <form onSubmit={handleSubmit} className="space-y-4">
-            <h1 className="text-3xl font-bold mb-4">{id ? 'Edit Company' : 'Add New Company'}</h1>
+            <h1 className="text-3xl font-bold mb-4">{id ? 'Editar Empresa' : 'Adicionar Nova Empresa'}</h1>
             <div>
-                <Label htmlFor="nome">Name</Label>
-                <Input id="nome" name="nome" value={company.nome} onChange={handleChange} required />
+                <Label htmlFor="nome">Nome</Label>
+                <Input id="nome" name="nome" value={empresa.nome} onChange={handleChange} required />
             </div>
             <div>
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" name="email" type="email" value={company.email} onChange={handleChange} required />
+                <Input id="email" name="email" type="email" value={empresa.email} onChange={handleChange} required />
             </div>
             <div>
-                <Label htmlFor="senha">Password</Label>
-                <Input id="senha" name="senha" type="password" value={company.senha} onChange={handleChange} required />
+                <Label htmlFor="senha">Senha</Label>
+                <Input id="senha" name="senha" type="password" value={empresa.senha} onChange={handleChange} required />
             </div>
             <div>
                 <Label htmlFor="cnpj">CNPJ</Label>
-                <Input id="cnpj" name="cnpj" value={company.cnpj} onChange={handleChange} required />
+                <Input id="cnpj" name="cnpj" value={empresa.cnpj} onChange={handleChange} required />
             </div>
-            <Button type="submit">{id ? 'Update' : 'Create'} Company</Button>
+            <Button type="submit">{id ? 'Atualizar' : 'Criar'} Empresa</Button>
         </form>
     )
 }

@@ -1,11 +1,13 @@
-import { useState, useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { useToast } from '@/hooks/use-toast'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import axios from 'axios'
+import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 
-interface Student {
+interface Aluno {
     id?: number
     nome: string
     email: string
@@ -17,47 +19,31 @@ interface Student {
     instituicaoId: number
 }
 
-const fetchStudent = async (id: string): Promise<Student> => {
-    const response = await fetch(`http://localhost:8080/alunos/${id}`)
-    if (!response.ok) {
-        throw new Error('Network response was not ok')
-    }
-    return response.json()
+const buscarAluno = async (id: string): Promise<Aluno> => {
+    const { data } = await axios.get(`http://localhost:8080/alunos/${id}`)
+    return data
 }
 
-const createStudent = async (student: Student): Promise<Student> => {
-    const response = await fetch('http://localhost:8080/alunos', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(student),
-    })
-    if (!response.ok) {
-        throw new Error('Network response was not ok')
-    }
-    return response.json()
+const criarAluno = async (aluno: Aluno): Promise<Aluno> => {
+    const { data } = await axios.post('http://localhost:8080/alunos', aluno)
+    return data
 }
 
-const updateStudent = async (student: Student): Promise<Student> => {
-    const response = await fetch(`http://localhost:8080/alunos/${student.id}`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(student),
-    })
-    if (!response.ok) {
-        throw new Error('Network response was not ok')
-    }
-    return response.json()
+const atualizarAluno = async (aluno: Aluno): Promise<Aluno> => {
+    const { data } = await axios.put(`http://localhost:8080/alunos/${aluno.id}`, aluno)
+    return data
 }
 
-export default function StudentForm() {
+const atualizarSenha = async ({ id, senhaAntiga, novaSenha }: { id: number, senhaAntiga: string, novaSenha: string }): Promise<void> => {
+    await axios.put(`http://localhost:8080/alunos/${id}/senha`, { senhaAntiga, novaSenha })
+}
+
+export default function FormularioAluno() {
+    const { toast } = useToast()
     const { id } = useParams<{ id: string }>()
     const navigate = useNavigate()
     const queryClient = useQueryClient()
-    const [student, setStudent] = useState<Student>({
+    const [aluno, setAluno] = useState<Aluno>({
         nome: '',
         email: '',
         senha: '',
@@ -67,87 +53,156 @@ export default function StudentForm() {
         curso: '',
         instituicaoId: 0,
     })
+    const [senhaAntiga, setSenhaAntiga] = useState('')
+    const [novaSenha, setNovaSenha] = useState('')
 
-    const { data, isLoading: isFetchingStudent } = useQuery<Student, Error>({
-        queryKey: ['student', id],
-        queryFn: () => fetchStudent(id!),
+    const { data, isLoading: estaCarregandoAluno } = useQuery<Aluno, Error>({
+        queryKey: ['aluno', id],
+        queryFn: () => buscarAluno(id!),
         enabled: !!id,
     })
 
     useEffect(() => {
         if (data) {
-            setStudent(data)
+            setAluno(data)
         }
     }, [data])
 
-    const createMutation = useMutation<Student, Error, Student>({
-        mutationFn: createStudent,
+    const criarMutacao = useMutation<Aluno, Error, Aluno>({
+        mutationFn: criarAluno,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['students'] })
-            navigate('/students')
+            queryClient.invalidateQueries({ queryKey: ['alunos'] })
+            navigate('/alunos')
+            toast({
+                title: "Sucesso",
+                description: "Aluno criado com sucesso!",
+            })
+        },
+        onError: (error) => {
+            toast({
+                title: "Erro",
+                description: `Erro ao criar aluno: ${error.message}`,
+                variant: "destructive",
+            })
         },
     })
 
-    const updateMutation = useMutation<Student, Error, Student>({
-        mutationFn: updateStudent,
+    const atualizarMutacao = useMutation<Aluno, Error, Aluno>({
+        mutationFn: atualizarAluno,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['alunos'] })
+            navigate('/alunos')
+            toast({
+                title: "Sucesso",
+                description: "Aluno atualizado com sucesso!",
+            })
+        },
+        onError: (error) => {
+            toast({
+                title: "Erro",
+                description: `Erro ao atualizar aluno: ${error.message}`,
+                variant: "destructive",
+            })
+        },
+    })
+
+    const atualizarSenhaMutacao = useMutation<void, Error, { id: number, senhaAntiga: string, novaSenha: string }>({
+        mutationFn: atualizarSenha,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['students'] })
             navigate('/students')
+            toast({
+                title: "Sucesso",
+                description: "Senha atualizada com sucesso!",
+            })
         },
+        onError: (error) => {
+            toast({
+                title: "Erro",
+                description: `Erro ao atualizar senha: ${error.message}`,
+                variant: "destructive",
+            })
+        }
     })
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
         if (id) {
-            updateMutation.mutate(student)
+            atualizarMutacao.mutate(aluno)
         } else {
-            createMutation.mutate(student)
+            criarMutacao.mutate(aluno)
         }
     }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
-        setStudent(prev => ({ ...prev, [name]: value }))
+        setAluno(prev => ({ ...prev, [name]: value }))
     }
 
-    if (isFetchingStudent) return <div>Loading...</div>
+    const handleAtualizarSenha = (e: React.FormEvent) => {
+        e.preventDefault()
+        if (id) {
+            atualizarSenhaMutacao.mutate({ id: Number(id), senhaAntiga, novaSenha })
+        }
+    }
+
+    if (estaCarregandoAluno) return <div>Carregando...</div>
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-4">
-            <h1 className="text-3xl font-bold mb-4">{id ? 'Edit Student' : 'Add New Student'}</h1>
-            <div>
-                <Label htmlFor="nome">Name</Label>
-                <Input id="nome" name="nome" value={student.nome} onChange={handleChange} required />
-            </div>
-            <div>
-                <Label htmlFor="email">Email</Label>
-                <Input id="email" name="email" type="email" value={student.email} onChange={handleChange} required />
-            </div>
-            <div>
-                <Label htmlFor="senha">Password</Label>
-                <Input id="senha" name="senha" type="password" value={student.senha} onChange={handleChange} required />
-            </div>
-            <div>
-                <Label htmlFor="cpf">CPF</Label>
-                <Input id="cpf" name="cpf" value={student.cpf} onChange={handleChange} required />
-            </div>
-            <div>
-                <Label htmlFor="rg">RG</Label>
-                <Input id="rg" name="rg" value={student.rg} onChange={handleChange} />
-            </div>
-            <div>
-                <Label htmlFor="endereco">Address</Label>
-                <Input id="endereco" name="endereco" value={student.endereco} onChange={handleChange} />
-            </div>
-            <div>
-                <Label htmlFor="curso">Course</Label>
-                <Input id="curso" name="curso" value={student.curso} onChange={handleChange} />
-            </div>
-            <div>
-                <Label htmlFor="instituicaoId">Institution ID</Label>
-                <Input id="instituicaoId" name="instituicaoId" type="number" value={student.instituicaoId} onChange={handleChange} required />
-            </div>
-            <Button type="submit">{id ? 'Update' : 'Create'} Student</Button>
-        </form>
+        <div className="space-y-8">
+            <form onSubmit={handleSubmit} className="space-y-4">
+                <h1 className="text-3xl font-bold mb-4">{id ? 'Editar Aluno' : 'Adicionar Novo Aluno'}</h1>
+                <div>
+                    <Label htmlFor="nome">Nome</Label>
+                    <Input id="nome" name="nome" value={aluno.nome} onChange={handleChange} required />
+                </div>
+                <div>
+                    <Label htmlFor="email">Email</Label>
+                    <Input id="email" name="email" type="email" value={aluno.email} onChange={handleChange} required />
+                </div>
+                {!id && (
+                    <div>
+                        <Label htmlFor="senha">Senha</Label>
+                        <Input id="senha" name="senha" type="password" value={aluno.senha} onChange={handleChange} required />
+                    </div>
+                )}
+                <div>
+                    <Label htmlFor="cpf">CPF</Label>
+                    <Input id="cpf" name="cpf" value={aluno.cpf} onChange={handleChange} required />
+                </div>
+                <div>
+                    <Label htmlFor="rg">RG</Label>
+                    <Input id="rg" name="rg" value={aluno.rg} onChange={handleChange} />
+                </div>
+                <div>
+                    <Label htmlFor="endereco">Endereço</Label>
+                    <Input id="endereco" name="endereco" value={aluno.endereco} onChange={handleChange} />
+                </div>
+                <div>
+                    <Label htmlFor="curso">Curso</Label>
+                    <Input id="curso" name="curso" value={aluno.curso} onChange={handleChange} />
+                </div>
+                {/* <div>
+                    <Label htmlFor="instituicaoId">ID da Instituição</Label>
+                    <Input id="instituicaoId" name="instituicaoId" type="number" value={aluno.instituicaoId} onChange={handleChange} required />
+                </div> */}
+                <Button type="submit">{id ? 'Atualizar' : 'Criar'} Aluno</Button>
+            </form>
+
+            {id && (
+                <form onSubmit={handleAtualizarSenha} className="space-y-4">
+                    <h2 className="text-2xl font-bold mb-4">Atualizar Senha</h2>
+                    <div>
+                        <Label htmlFor="senhaAntiga">Senha Antiga</Label>
+                        <Input id="senhaAntiga" name="senhaAntiga" type="password" value={senhaAntiga} onChange={(e) => setSenhaAntiga(e.target.value)} required />
+                    </div>
+                    <div>
+                        <Label htmlFor="novaSenha">Nova Senha</Label>
+                        <Input id="novaSenha" name="novaSenha" type="password" value={novaSenha} onChange={(e) => setNovaSenha(e.target.value)} required />
+                    </div>
+                    <Button type="submit">Atualizar Senha</Button>
+                </form>
+            )}
+        </div>
     )
 }
