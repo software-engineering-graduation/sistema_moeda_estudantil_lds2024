@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.DTO.Empresa.EmpresaCreate;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.DTO.Empresa.EmpresaDTO;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.entity.Empresa;
-import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.enums.TipoUsuario;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.mapper.EmpresaMapper;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.repository.EmpresaRepository;
 
@@ -37,7 +36,6 @@ public class EmpresaService {
 
     public EmpresaDTO salvar(EmpresaCreate empresaCreate) {
         Empresa empresa = mapper.toEntity(empresaCreate);
-        empresa.setTipo(TipoUsuario.EMPRESA);
         Empresa savedEmpresa = empresaRepository.save(empresa);
         return mapper.toDTO(savedEmpresa);
     }

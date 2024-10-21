@@ -19,20 +19,19 @@ public interface EmpresaMapper {
     EmpresaDTO toDTO(Empresa empresa);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "tipo", ignore = true)
     @Mapping(target = "saldoMoedas", ignore = true)
     @Mapping(target = "vantagens", ignore = true)
+    @Mapping(target = "funcionarios", ignore = true)
     Empresa toEntity(EmpresaCreate empresaCreate);
 
-    @Mapping(target = "senha", ignore = true)
-    @Mapping(target = "tipo", ignore = true)
     @Mapping(target = "vantagens", ignore = true)
+    @Mapping(target = "funcionarios", ignore = true)
     Empresa toEntity(EmpresaDTO empresaDTO);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "tipo", ignore = true)
     @Mapping(target = "saldoMoedas", ignore = true)
     @Mapping(target = "vantagens", ignore = true)
+    @Mapping(target = "funcionarios", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateEntityFromDto(EmpresaCreate empresaCreate, @MappingTarget Empresa empresa);
 }
