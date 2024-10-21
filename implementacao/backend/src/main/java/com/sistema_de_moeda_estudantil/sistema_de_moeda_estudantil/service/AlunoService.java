@@ -53,15 +53,15 @@ public class AlunoService {
         return alunoMapper.toDTO(savedAluno);
     }
 
-    public Optional<AlunoDTO> atualizar(int id, AlunoCreate alunoCreate) {
+    public Optional<AlunoDTO> atualizar(int id, AlunoDTO alunoDto) {
         Optional<Aluno> alunoExistente = alunoRepository.findById(id);
 
         if (alunoExistente.isPresent()) {
             Aluno aluno = alunoExistente.get();
-            alunoMapper.updateEntityFromDto(alunoCreate, aluno);
+            alunoMapper.updateEntityFromDto(alunoDto, aluno);
 
-            if (alunoCreate.getInstituicaoId() != null) {
-                Optional<Instituicao> instituicao = instituicaoRepository.findById(alunoCreate.getInstituicaoId());
+            if (alunoDto.getInstituicao() != null) {
+                Optional<Instituicao> instituicao = instituicaoRepository.findById(alunoDto.getInstituicao().getId());
                 instituicao.ifPresent(aluno::setInstituicao);
             }
 

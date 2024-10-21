@@ -11,7 +11,7 @@ import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.DTO.Empresa.E
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.DTO.Empresa.EmpresaDTO;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.entity.Empresa;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface EmpresaMapper {
 
     EmpresaMapper INSTANCE = Mappers.getMapper(EmpresaMapper.class);
@@ -23,6 +23,11 @@ public interface EmpresaMapper {
     @Mapping(target = "saldoMoedas", ignore = true)
     @Mapping(target = "vantagens", ignore = true)
     Empresa toEntity(EmpresaCreate empresaCreate);
+
+    @Mapping(target = "senha", ignore = true)
+    @Mapping(target = "tipo", ignore = true)
+    @Mapping(target = "vantagens", ignore = true)
+    Empresa toEntity(EmpresaDTO empresaDTO);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "tipo", ignore = true)
