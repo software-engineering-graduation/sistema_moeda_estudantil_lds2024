@@ -1,0 +1,94 @@
+@startuml
+' Configurações de estilo para melhorar a visualização
+skinparam packageStyle rectangle
+skinparam packageBackgroundColor #F0F8FF
+skinparam packageBorderColor #1E90FF
+skinparam packageFontColor black
+skinparam packageFontStyle bold
+
+skinparam classBackgroundColor #FFFFFF
+skinparam classBorderColor #000000
+skinparam classFontColor black
+
+package "com.sistema_de_moeda_estudantil" {
+    
+    ' Pacote de Controladores
+    package "<b>controller</b>" as controller <<Controller>> #FFFAF0 {
+        [AlunoController]
+        [ProfessorController]
+        [EmpresaController]
+        [InstituicaoController]
+        [VantagemController]
+        [TransacaoController]
+        [CupomResgateController]
+    }
+    
+    ' Pacote de Serviços
+    package "<b>service</b>" as service <<Service>> #F5FFFA {
+        [AlunoService]
+        [ProfessorService]
+        [EmpresaService]
+        [InstituicaoService]
+        [VantagemService]
+        [TransacaoService]
+        [CupomResgateService]
+    }
+    
+    ' Pacote de Repositórios
+    package "<b>repository</b>" as repository <<Repository>> #FFF5EE {
+        [AlunoRepository]
+        [ProfessorRepository]
+        [EmpresaRepository]
+        [InstituicaoRepository]
+        [VantagemRepository]
+        [TransacaoRepository]
+        [CupomResgateRepository]
+    }
+    
+    ' Pacote de Entidades
+    package "<b>entity</b>" as entity <<Entity>> #F0FFF0 {
+        [Usuario]
+        [Aluno]
+        [Professor]
+        [Empresa]
+        [Instituicao]
+        [Vantagem]
+        [Transacao]
+        [CupomResgate]
+    }
+    
+    ' Pacote de DTOs
+    package "<b>dto</b>" as dto <<DTO>> #FFF0F5 {
+        [UsuarioDTO]
+        [UsuarioCreateDTO]
+        [AlunoDTO]
+        [AlunoCreateDTO]
+        [ProfessorDTO]
+        [ProfessorCreateDTO]
+        [EmpresaDTO]
+        [EmpresaCreateDTO]
+        [InstituicaoDTO]
+        [InstituicaoCreateDTO]
+        [VantagemDTO]
+        [VantagemCreateDTO]
+        [TransacaoDTO]
+        [TransacaoCreateDTO]
+        [CupomResgateDTO]
+        [CupomResgateCreateDTO]
+    }
+}
+
+controller --> service : Usa
+service --> repository : Usa
+service --> entity : Manipula
+controller --> dto : Usa
+
+skinparam package {
+    FontSize 14
+    FontColor Black
+}
+
+skinparam class {
+    FontSize 12
+}
+@enduml
