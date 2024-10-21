@@ -1,6 +1,7 @@
 package com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.service;
 
 
+import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.DTO.instituicao.InstituicaoCreate;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.DTO.instituicao.InstituicaoDTO;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.entity.Instituicao;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.mapper.InstituicaoMapper;
@@ -36,5 +37,25 @@ public class InstituicaoService {
         return instituicoes.stream()
                 .map(instituicaoMapper::toDTO)
                 .collect(Collectors.toList());
+    }
+
+    public InstituicaoDTO create(InstituicaoCreate createDTO) {
+        Instituicao instituicao = instituicaoMapper.toEntity(createDTO);
+        Instituicao savedInstituicao = instituicaoRepository.save(instituicao);
+        return instituicaoMapper.toDTO(savedInstituicao);
+    }
+
+    public InstituicaoDTO update(int id, InstituicaoDTO instituicaoDto) {
+        Instituicao instituicao = instituicaoRepository.findById(id)
+                .orElseThrow();
+        instituicaoMapper.updateEntityFromDto(instituicaoDto, instituicao);
+        Instituicao updatedInstituicao = instituicaoRepository.save(instituicao);
+        return instituicaoMapper.toDTO(updatedInstituicao);
+    }
+
+    public void delete(int id) {
+        Instituicao instituicao = instituicaoRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Instituição não encontrada com id: " + id));
+        instituicaoRepository.delete(instituicao);
     }
 }
