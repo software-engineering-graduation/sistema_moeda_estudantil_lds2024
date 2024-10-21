@@ -75,4 +75,22 @@ public class AlunoService {
     public void deletarPorId(int id) {
         alunoRepository.deleteById(id);
     }
+
+    public Optional<AlunoDTO> atualizarSenha(int id, String senhaAntiga, String novaSenha) {
+        Optional<Aluno> alunoExistente = alunoRepository.findById(id);
+
+        if (alunoExistente.isPresent()) {
+            Aluno aluno = alunoExistente.get();
+
+            if (aluno.getSenha().equals(senhaAntiga)) {
+                aluno.setSenha(novaSenha);
+                Aluno updatedAluno = alunoRepository.save(aluno);
+                return Optional.of(alunoMapper.toDTO(updatedAluno));
+            } else {
+                throw new IllegalArgumentException("Senha antiga incorreta");
+            }
+        } else {
+            return Optional.empty();
+        }
+    }
 }

@@ -1,11 +1,13 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { Button } from '@/components/ui/button'
-import StudentList from './components/StudentList'
-import CompanyList from './components/CompanyList'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { Link, Route, BrowserRouter as Router, Routes } from 'react-router-dom'
+import FormularioEmpresa from './components/FormularioEmpresa'
+import FormularioFuncionarioEmpresa from './components/FormularioFuncionarioEmpresa'
+import ListaEmpresas from './components/ListaEmpresas'
+import ListaFuncionariosEmpresa from './components/ListaFuncionariosEmpresa'
 import StudentForm from './components/StudentForm'
-import CompanyForm from './components/CompanyForm'
+import StudentList from './components/StudentList'
 import { Toaster } from './components/ui/toaster'
 
 const queryClient = new QueryClient()
@@ -26,13 +28,18 @@ export default function App() {
           </header>
           <main className="container mx-auto px-4 py-8">
             <Routes>
-              <Route path="/" element={<h1 className="text-4xl font-bold">Welcome to Student Currency System</h1>} />
+              <Route path="/" element={<h1 className="text-4xl font-bold">Bem-vindo ao Sistema de Moeda Estudantil</h1>} />
               <Route path="/alunos" element={<StudentList />} />
               <Route path="/alunos/novo" element={<StudentForm />} />
               <Route path="/alunos/:id" element={<StudentForm />} />
-              <Route path="/empresas" element={<CompanyList />} />
-              <Route path="/empresas/nova" element={<CompanyForm />} />
-              <Route path="/empresas/:id" element={<CompanyForm />} />
+              <Route path="/empresas">
+                <Route index element={<ListaEmpresas />} />
+                <Route path="nova" element={<FormularioEmpresa />} />
+                <Route path=":id" element={<FormularioEmpresa />} />
+                <Route path=":id/funcionarios" element={<ListaFuncionariosEmpresa />} />
+                <Route path=":id/funcionarios/novo" element={<FormularioFuncionarioEmpresa />} />
+                <Route path=":id/funcionarios/:funcionarioId" element={<FormularioFuncionarioEmpresa />} />
+              </Route>
             </Routes>
           </main>
         </div>

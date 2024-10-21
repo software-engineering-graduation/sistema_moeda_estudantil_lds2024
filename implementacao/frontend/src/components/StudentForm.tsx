@@ -6,6 +6,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select'
 
 interface Aluno {
     id?: number
@@ -16,7 +17,12 @@ interface Aluno {
     rg: string
     endereco: string
     curso: string
-    instituicaoId: number
+    instituicao: Instituicao | null
+}
+
+interface Instituicao {
+    id: number
+    nome: string
 }
 
 const buscarAluno = async (id: string): Promise<Aluno> => {
@@ -38,6 +44,11 @@ const atualizarSenha = async ({ id, senhaAntiga, novaSenha }: { id: number, senh
     await axios.put(`http://localhost:8080/alunos/${id}/senha`, { senhaAntiga, novaSenha })
 }
 
+const buscarInstituicoes = async (): Promise<Instituicao[]> => {
+    const { data } = await axios.get('http://localhost:8080/instituicoes')
+    return data
+}
+
 export default function FormularioAluno() {
     const { toast } = useToast()
     const { id } = useParams<{ id: string }>()
@@ -51,8 +62,9 @@ export default function FormularioAluno() {
         rg: '',
         endereco: '',
         curso: '',
-        instituicaoId: 0,
+        instituicao: null,
     })
+    const [instituicoes, setInstituicoes] = useState<Instituicao[]>([])
     const [senhaAntiga, setSenhaAntiga] = useState('')
     const [novaSenha, setNovaSenha] = useState('')
 
@@ -61,6 +73,17 @@ export default function FormularioAluno() {
         queryFn: () => buscarAluno(id!),
         enabled: !!id,
     })
+
+    const { data: instituicoesData } = useQuery<Instituicao[], Error>({
+        queryKey: ['instituicoes'],
+        queryFn: buscarInstituicoes,
+    })
+
+    useEffect(() => {
+        if (instituicoesData) {
+            setInstituicoes(instituicoesData)
+        }
+    }, [instituicoesData])
 
     useEffect(() => {
         if (data) {
@@ -110,7 +133,7 @@ export default function FormularioAluno() {
         mutationFn: atualizarSenha,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['students'] })
-            navigate('/students')
+            navigate('/alunos')
             toast({
                 title: "Sucesso",
                 description: "Senha atualizada com sucesso!",
@@ -134,9 +157,13 @@ export default function FormularioAluno() {
         }
     }
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target
-        setAluno(prev => ({ ...prev, [name]: value }))
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement> | string, selectName?: string) => {
+        if (typeof e === 'string' && selectName) {
+            setAluno(prev => ({ ...prev, [selectName]: e }))
+        } else if (typeof e !== 'string') {
+            const { name, value } = e.target
+            setAluno(prev => ({ ...prev, [name]: value }))
+        }
     }
 
     const handleAtualizarSenha = (e: React.FormEvent) => {
@@ -182,10 +209,24 @@ export default function FormularioAluno() {
                     <Label htmlFor="curso">Curso</Label>
                     <Input id="curso" name="curso" value={aluno.curso} onChange={handleChange} />
                 </div>
-                {/* <div>
-                    <Label htmlFor="instituicaoId">ID da Instituição</Label>
-                    <Input id="instituicaoId" name="instituicaoId" type="number" value={aluno.instituicaoId} onChange={handleChange} required />
-                </div> */}
+                <div>
+                    <Label htmlFor="instituicaoId">Instituição</Label>
+                    <Select
+                        onValueChange={(value) => handleChange(value, 'instituicaoId')}
+                        value={aluno.instituicao?.id.toString()}
+                    >
+                        <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Selecione uma instituição" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {instituicoes.map(instituicao => (
+                                <SelectItem key={instituicao.id} value={instituicao.id.toString()}>
+                                    {instituicao.nome}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                </div>
                 <Button type="submit">{id ? 'Atualizar' : 'Criar'} Aluno</Button>
             </form>
 

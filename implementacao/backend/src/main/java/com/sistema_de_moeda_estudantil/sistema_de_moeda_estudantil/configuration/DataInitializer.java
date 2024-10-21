@@ -48,6 +48,8 @@ public class DataInitializer implements CommandLineRunner {
     private void addAlunos() {
         Aluno aluno = new Aluno();
         aluno.setNome("Sabrina Carpenter");
+        aluno.setSenha("123456");
+        aluno.setEmail("aluno.email@email.com");
         aluno.setCpf("123.456.789-00");
         aluno.setRg("12.345.678-9");
         aluno.setEndereco("Avenida Expresso, 150, Belo Horizonte - MG, 70707-070");
