@@ -4,8 +4,10 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { Link, Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 import FormularioEmpresa from './components/FormularioEmpresa'
 import FormularioFuncionarioEmpresa from './components/FormularioFuncionarioEmpresa'
+import FormularioVantagem from './components/FormularioVantagem'
 import ListaEmpresas from './components/ListaEmpresas'
 import ListaFuncionariosEmpresa from './components/ListaFuncionariosEmpresa'
+import ListaVantagens from './components/ListaVantagens'
 import StudentForm from './components/StudentForm'
 import StudentList from './components/StudentList'
 import { Toaster } from './components/ui/toaster'
@@ -39,6 +41,9 @@ export default function App() {
                 <Route path=":id/funcionarios" element={<ListaFuncionariosEmpresa />} />
                 <Route path=":id/funcionarios/novo" element={<FormularioFuncionarioEmpresa />} />
                 <Route path=":id/funcionarios/:funcionarioId" element={<FormularioFuncionarioEmpresa />} />
+                <Route path="/empresas/:id/vantagens" element={<ListaVantagens />} />
+                <Route path="/empresas/:id/vantagens/nova" element={<FormularioVantagem />} />
+                <Route path="/empresas/:id/vantagens/:vantagemId" element={<FormularioVantagem />} />
               </Route>
             </Routes>
           </main>

@@ -1,18 +1,17 @@
-// src/components/ListaFuncionariosEmpresa.tsx
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import axios from 'axios'
 
-interface Funcionario {
+interface FuncionarioEmpresa {
     id: number
     nome: string
     email: string
-    cargo: string
+    tipo: string
 }
 
-const buscarFuncionarios = async (empresaId: string): Promise<Funcionario[]> => {
+const buscarFuncionarios = async (empresaId: string): Promise<FuncionarioEmpresa[]> => {
     const { data } = await axios.get(`http://localhost:8080/empresas/${empresaId}/funcionarios`)
     return data
 }
@@ -21,7 +20,7 @@ export default function ListaFuncionariosEmpresa() {
     const { id: empresaId } = useParams<{ id: string }>()
     const navigate = useNavigate()
 
-    const { data: funcionarios = [], isLoading, error } = useQuery<Funcionario[], Error>({
+    const { data: funcionarios = [], isLoading, error } = useQuery<FuncionarioEmpresa[], Error>({
         queryKey: ['funcionarios', empresaId],
         queryFn: () => buscarFuncionarios(empresaId!),
     })
@@ -40,7 +39,6 @@ export default function ListaFuncionariosEmpresa() {
                     <TableRow>
                         <TableHead>Nome</TableHead>
                         <TableHead>Email</TableHead>
-                        <TableHead>Cargo</TableHead>
                         <TableHead>Ações</TableHead>
                     </TableRow>
                 </TableHeader>
@@ -49,7 +47,6 @@ export default function ListaFuncionariosEmpresa() {
                         <TableRow key={funcionario.id}>
                             <TableCell>{funcionario.nome}</TableCell>
                             <TableCell>{funcionario.email}</TableCell>
-                            <TableCell>{funcionario.cargo}</TableCell>
                             <TableCell>
                                 <Button onClick={() => navigate(`/empresas/${empresaId}/funcionarios/${funcionario.id}`)}>
                                     Editar

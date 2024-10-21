@@ -1,6 +1,7 @@
 package com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.DTO.FuncionarioEmpresa.FuncionarioEmpresaCreate;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.DTO.FuncionarioEmpresa.FuncionarioEmpresaDTO;
+import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.entity.Aluno;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.entity.Empresa;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.entity.FuncionarioEmpresa;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.mapper.FuncionarioEmpresaMapper;
@@ -51,8 +53,8 @@ public class FuncionarioEmpresaService {
                 .collect(Collectors.toList());
     }
 
-    public FuncionarioEmpresaDTO create(FuncionarioEmpresaCreate createDTO) {
-        Empresa empresa = empresaRepository.findById(createDTO.getEmpresaId())
+    public FuncionarioEmpresaDTO create(int empresaId, FuncionarioEmpresaCreate createDTO) {
+        Empresa empresa = empresaRepository.findById(empresaId)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Empresa não encontrada com id: " + createDTO.getEmpresaId()));
         FuncionarioEmpresa funcionario = mapper.toEntity(createDTO);
@@ -77,4 +79,31 @@ public class FuncionarioEmpresaService {
         funcionarioEmpresaRepository.delete(funcionario);
     }
 
+    public Optional<FuncionarioEmpresaDTO> getById(int empresaId, int funcionarioId) {
+        Optional<FuncionarioEmpresa> funcionario = funcionarioEmpresaRepository.findByIdAndEmpresaId(funcionarioId, empresaId);
+        return funcionario.map(mapper::toDTO);
+    }
+
+    public Optional<FuncionarioEmpresaDTO> atualizarSenha(int empresaId, int funcionarioId, String senhaAntiga, String novaSenha) {
+        Optional<FuncionarioEmpresa> funcinarioExistente = funcionarioEmpresaRepository.findById(funcionarioId);
+
+        if (funcinarioExistente.isPresent()) {
+            
+            if(funcinarioExistente.get().getEmpresa() == null || funcinarioExistente.get().getEmpresa().getId() != empresaId){
+                throw new IllegalArgumentException("Empresa inválida");
+            }
+
+            FuncionarioEmpresa funcionario = funcinarioExistente.get();
+
+            if (funcionario.getSenha().equals(senhaAntiga)) {
+                funcionario.setSenha(novaSenha);
+                FuncionarioEmpresa updatedFuncionario = funcionarioEmpresaRepository.save(funcionario);
+                return Optional.of(mapper.toDTO(updatedFuncionario));
+            } else {
+                throw new IllegalArgumentException("Senha antiga incorreta");
+            }
+        } else {
+            return Optional.empty();
+        }
+    }
 }

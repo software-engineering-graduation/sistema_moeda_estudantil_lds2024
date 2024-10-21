@@ -76,6 +76,9 @@ export default function ListaEmpresas() {
                     <Button onClick={() => navigate(`/empresas/${info.getValue()}/funcionarios`)}>
                         Gerenciar Funcionários
                     </Button>
+                    <Button onClick={() => navigate(`/empresas/${info.getValue()}/vantagens`)}>
+                        Gerenciar Vantagens
+                    </Button>
                     <Button
                         variant="destructive"
                         onClick={() => {
