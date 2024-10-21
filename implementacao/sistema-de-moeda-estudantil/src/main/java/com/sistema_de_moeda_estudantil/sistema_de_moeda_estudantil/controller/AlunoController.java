@@ -40,8 +40,8 @@ public class AlunoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AlunoDTO> atualizarAluno(@PathVariable int id, @Valid @RequestBody AlunoCreate alunoCreate) {
-        Optional<AlunoDTO> alunoAtualizado = alunoService.atualizar(id, alunoCreate);
+    public ResponseEntity<AlunoDTO> atualizarAluno(@PathVariable int id, @Valid @RequestBody AlunoDTO alunoDto) {
+        Optional<AlunoDTO> alunoAtualizado = alunoService.atualizar(id, alunoDto);
         return alunoAtualizado.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
