@@ -4,7 +4,10 @@ import org.springframework.web.bind.annotation.*;
 
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.DTO.Empresa.EmpresaCreate;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.DTO.Empresa.EmpresaDTO;
+import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.DTO.FuncionarioEmpresa.FuncionarioEmpresaCreate;
+import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.DTO.FuncionarioEmpresa.FuncionarioEmpresaDTO;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.service.EmpresaService;
+import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.service.FuncionarioEmpresaService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +22,9 @@ public class EmpresaController {
 
     @Autowired
     private EmpresaService empresaService;
+
+    @Autowired
+    private FuncionarioEmpresaService funcionarioEmpresaService;
 
     @GetMapping
     public List<EmpresaDTO> obterTodasEmpresas() {
@@ -48,6 +54,30 @@ public class EmpresaController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarEmpresa(@PathVariable int id) {
         empresaService.deletarPorId(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{empresaId}/funcionarios")
+    public ResponseEntity<List<FuncionarioEmpresaDTO>> obterFuncionariosPorEmpresaId(@PathVariable int empresaId) {
+        List<FuncionarioEmpresaDTO> funcionarios = funcionarioEmpresaService.getByEmpresaId(empresaId);
+        return ResponseEntity.ok(funcionarios);
+    }
+    
+    @PostMapping("/{empresaId}/funcionarios")
+    public ResponseEntity<FuncionarioEmpresaDTO> criarFuncionario(@PathVariable int empresaId, @RequestBody FuncionarioEmpresaCreate funcionarioCreate) {
+        FuncionarioEmpresaDTO funcionarioCriado = funcionarioEmpresaService.create(funcionarioCreate);
+        return ResponseEntity.status(HttpStatus.CREATED).body(funcionarioCriado);
+    }
+
+    @PutMapping("/{empresaId}/funcionarios/{funcionarioId}")
+    public ResponseEntity<FuncionarioEmpresaDTO> atualizarFuncionario(@PathVariable int empresaId, @PathVariable int funcionarioId, @RequestBody FuncionarioEmpresaDTO funcionarioUpdate) {
+        FuncionarioEmpresaDTO funcionarioAtualizado = funcionarioEmpresaService.update(empresaId, funcionarioId, funcionarioUpdate);
+        return ResponseEntity.ok(funcionarioAtualizado);
+    }
+
+    @DeleteMapping("/{empresaId}/funcionarios/{id}")
+    public ResponseEntity<Void> deletarFuncionario(@PathVariable int empresaId, @PathVariable int id) {
+        funcionarioEmpresaService.delete(id);
         return ResponseEntity.noContent().build();
     }
 }

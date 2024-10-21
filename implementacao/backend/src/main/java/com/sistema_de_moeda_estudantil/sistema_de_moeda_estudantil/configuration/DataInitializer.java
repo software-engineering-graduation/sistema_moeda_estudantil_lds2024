@@ -61,6 +61,7 @@ public class DataInitializer implements CommandLineRunner {
 
     private void addEmpresas() {
         Empresa empresa = new Empresa();
+        empresa.setNome("Gostosuras PUB");
         empresa.setCnpj("12.345.678/0001-90");
         empresaRepository.save(empresa);
     }
