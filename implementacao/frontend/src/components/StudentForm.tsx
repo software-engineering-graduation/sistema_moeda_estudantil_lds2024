@@ -1,9 +1,9 @@
+import api from '@/api'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useToast } from '@/hooks/use-toast'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select'
@@ -26,26 +26,26 @@ interface Instituicao {
 }
 
 const buscarAluno = async (id: string): Promise<Aluno> => {
-    const { data } = await axios.get(`http://localhost:8080/alunos/${id}`)
+    const { data } = await api.get(`/alunos/${id}`)
     return data
 }
 
 const criarAluno = async (aluno: Aluno): Promise<Aluno> => {
-    const { data } = await axios.post('http://localhost:8080/alunos', aluno)
+    const { data } = await api.post('/alunos', aluno)
     return data
 }
 
 const atualizarAluno = async (aluno: Aluno): Promise<Aluno> => {
-    const { data } = await axios.put(`http://localhost:8080/alunos/${aluno.id}`, aluno)
+    const { data } = await api.put(`/alunos/${aluno.id}`, aluno)
     return data
 }
 
 const atualizarSenha = async ({ id, senhaAntiga, novaSenha }: { id: number, senhaAntiga: string, novaSenha: string }): Promise<void> => {
-    await axios.put(`http://localhost:8080/alunos/${id}/senha`, { senhaAntiga, novaSenha })
+    await api.put(`/alunos/${id}/senha`, { senhaAntiga, novaSenha })
 }
 
 const buscarInstituicoes = async (): Promise<Instituicao[]> => {
-    const { data } = await axios.get('http://localhost:8080/instituicoes')
+    const { data } = await api.get('/instituicoes')
     return data
 }
 

@@ -1,11 +1,11 @@
+import api from '@/api'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { useToast } from "@/hooks/use-toast"
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import axios from 'axios'
-import { useToast } from "@/hooks/use-toast"
 
 interface Empresa {
     id?: number
@@ -16,17 +16,17 @@ interface Empresa {
 }
 
 const buscarEmpresa = async (id: string): Promise<Empresa> => {
-    const { data } = await axios.get(`http://localhost:8080/empresas/${id}`)
+    const { data } = await api.get(`/empresas/${id}`)
     return data
 }
 
 const criarEmpresa = async (empresa: Empresa): Promise<Empresa> => {
-    const { data } = await axios.post('http://localhost:8080/empresas', empresa)
+    const { data } = await api.post('/empresas', empresa)
     return data
 }
 
 const atualizarEmpresa = async (empresa: Empresa): Promise<Empresa> => {
-    const { data } = await axios.put(`http://localhost:8080/empresas/${empresa.id}`, empresa)
+    const { data } = await api.put(`/empresas/${empresa.id}`, empresa)
     return data
 }
 

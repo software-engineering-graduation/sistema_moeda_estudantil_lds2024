@@ -1,3 +1,4 @@
+import api from '@/api'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -5,7 +6,6 @@ import { useToast } from "@/hooks/use-toast"
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import axios from 'axios'
 
 interface Vantagem {
     id?: number
@@ -16,17 +16,17 @@ interface Vantagem {
 }
 
 const buscarVantagem = async (empresaId: string, vantagemId: string): Promise<Vantagem> => {
-    const { data } = await axios.get(`http://localhost:8080/empresas/${empresaId}/vantagens/${vantagemId}`)
+    const { data } = await api.get(`/empresas/${empresaId}/vantagens/${vantagemId}`)
     return data
 }
 
 const criarVantagem = async (empresaId: string, vantagem: Vantagem): Promise<Vantagem> => {
-    const { data } = await axios.post(`http://localhost:8080/empresas/${empresaId}/vantagens`, vantagem)
+    const { data } = await api.post(`/empresas/${empresaId}/vantagens`, vantagem)
     return data
 }
 
 const atualizarVantagem = async (empresaId: string, vantagem: Vantagem): Promise<Vantagem> => {
-    const { data } = await axios.put(`http://localhost:8080/empresas/${empresaId}/vantagens/${vantagem.id}`, vantagem)
+    const { data } = await api.put(`/empresas/${empresaId}/vantagens/${vantagem.id}`, vantagem)
     return data
 }
 

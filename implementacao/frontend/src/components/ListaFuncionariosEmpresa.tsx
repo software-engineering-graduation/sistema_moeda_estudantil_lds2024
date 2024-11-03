@@ -1,8 +1,8 @@
-import { useQuery } from '@tanstack/react-query'
-import { useNavigate, useParams } from 'react-router-dom'
+import api from '@/api'
 import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import axios from 'axios'
+import { useQuery } from '@tanstack/react-query'
+import { useNavigate, useParams } from 'react-router-dom'
 
 interface FuncionarioEmpresa {
     id: number
@@ -12,7 +12,7 @@ interface FuncionarioEmpresa {
 }
 
 const buscarFuncionarios = async (empresaId: string): Promise<FuncionarioEmpresa[]> => {
-    const { data } = await axios.get(`http://localhost:8080/empresas/${empresaId}/funcionarios`)
+    const { data } = await api.get(`/empresas/${empresaId}/funcionarios`)
     return data
 }
 

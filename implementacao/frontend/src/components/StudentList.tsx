@@ -1,11 +1,4 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { useNavigate } from 'react-router-dom'
-import {
-    createColumnHelper,
-    flexRender,
-    getCoreRowModel,
-    useReactTable,
-} from '@tanstack/react-table'
+import api from '@/api'
 import { Button } from '@/components/ui/button'
 import {
     Table,
@@ -15,7 +8,14 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table'
-import axios from 'axios'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import {
+    createColumnHelper,
+    flexRender,
+    getCoreRowModel,
+    useReactTable,
+} from '@tanstack/react-table'
+import { useNavigate } from 'react-router-dom'
 
 interface Aluno {
     id: number
@@ -27,12 +27,12 @@ interface Aluno {
 }
 
 const buscarAlunos = async (): Promise<Aluno[]> => {
-    const { data } = await axios.get('http://localhost:8080/alunos')
+    const { data } = await api.get('/alunos')
     return data
 }
 
 const excluirAluno = async (id: number): Promise<void> => {
-    await axios.delete(`http://localhost:8080/alunos/${id}`)
+    await api.delete(`/alunos/${id}`)
 }
 
 const columnHelper = createColumnHelper<Aluno>()

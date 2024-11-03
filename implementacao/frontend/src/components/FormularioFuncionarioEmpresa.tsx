@@ -1,3 +1,4 @@
+import api from '@/api'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -5,7 +6,6 @@ import { useToast } from "@/hooks/use-toast"
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import axios from 'axios'
 
 interface FuncionarioEmpresa {
     id?: number
@@ -16,22 +16,22 @@ interface FuncionarioEmpresa {
 }
 
 const buscarFuncionario = async (empresaId: string, funcionarioId: string): Promise<FuncionarioEmpresa> => {
-    const { data } = await axios.get(`http://localhost:8080/empresas/${empresaId}/funcionarios/${funcionarioId}`)
+    const { data } = await api.get(`/empresas/${empresaId}/funcionarios/${funcionarioId}`)
     return data
 }
 
 const criarFuncionario = async (empresaId: string, funcionario: FuncionarioEmpresa): Promise<FuncionarioEmpresa> => {
-    const { data } = await axios.post(`http://localhost:8080/empresas/${empresaId}/funcionarios`, funcionario)
+    const { data } = await api.post(`/empresas/${empresaId}/funcionarios`, funcionario)
     return data
 }
 
 const atualizarFuncionario = async (empresaId: string, funcionario: FuncionarioEmpresa): Promise<FuncionarioEmpresa> => {
-    const { data } = await axios.put(`http://localhost:8080/empresas/${empresaId}/funcionarios/${funcionario.id}`, funcionario)
+    const { data } = await api.put(`/empresas/${empresaId}/funcionarios/${funcionario.id}`, funcionario)
     return data
 }
 
 const atualizarSenha = async (empresaId: string, funcionarioId: string, senhaAntiga: string, novaSenha: string): Promise<void> => {
-    await axios.put(`http://localhost:8080/empresas/${empresaId}/funcionarios/${funcionarioId}/senha`, { senhaAntiga, novaSenha })
+    await api.put(`/empresas/${empresaId}/funcionarios/${funcionarioId}/senha`, { senhaAntiga, novaSenha })
 }
 
 export default function FormularioFuncionarioEmpresa() {

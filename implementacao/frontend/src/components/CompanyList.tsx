@@ -1,11 +1,4 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { useNavigate } from 'react-router-dom'
-import {
-    createColumnHelper,
-    flexRender,
-    getCoreRowModel,
-    useReactTable,
-} from '@tanstack/react-table'
+import api from '@/api'
 import { Button } from '@/components/ui/button'
 import {
     Table,
@@ -15,8 +8,15 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table'
-import axios from 'axios'
 import { useToast } from "@/hooks/use-toast"
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import {
+    createColumnHelper,
+    flexRender,
+    getCoreRowModel,
+    useReactTable,
+} from '@tanstack/react-table'
+import { useNavigate } from 'react-router-dom'
 
 interface Empresa {
     id: number
@@ -27,12 +27,12 @@ interface Empresa {
 }
 
 const buscarEmpresas = async (): Promise<Empresa[]> => {
-    const { data } = await axios.get('http://localhost:8080/empresas')
+    const { data } = await api.get('/empresas')
     return data
 }
 
 const excluirEmpresa = async (id: number): Promise<void> => {
-    await axios.delete(`http://localhost:8080/empresas/${id}`)
+    await api.delete(`/empresas/${id}`)
 }
 
 const columnHelper = createColumnHelper<Empresa>()

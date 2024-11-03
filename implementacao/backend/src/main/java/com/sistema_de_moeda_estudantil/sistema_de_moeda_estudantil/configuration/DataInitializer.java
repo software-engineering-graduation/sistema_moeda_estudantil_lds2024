@@ -7,12 +7,17 @@ import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.entity.Aluno;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.entity.Empresa;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.entity.FuncionarioEmpresa;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.entity.Instituicao;
+import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.entity.Usuario;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.entity.Vantagem;
+import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.enums.TipoUsuario;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.repository.AlunoRepository;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.repository.EmpresaRepository;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.repository.FuncionarioEmpresaRepository;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.repository.InstituicaoRepository;
+import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.repository.UserRepository;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.repository.VantagemRepository;
+
+import lombok.AllArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,26 +25,34 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Component
+@AllArgsConstructor
 public class DataInitializer implements CommandLineRunner {
 
-    @Autowired
     private InstituicaoRepository instituicaoRepository;
-    @Autowired
     private AlunoRepository alunoRepository;
-    @Autowired
     private EmpresaRepository empresaRepository;
-    @Autowired
     private VantagemRepository vantagemRepository;
-    @Autowired
+    private UserRepository userRepository;
     private FuncionarioEmpresaRepository funcionarioEmpresaRepository;
 
     @Override
     public void run(String... args) throws Exception {
+        createAdmin();
         addInstituicoes();
         addAlunos();
         addEmpresas();
         addFuncionarios();
         addVantagens();
+    }
+
+    private void createAdmin() {
+        Usuario admin = new Usuario();
+
+        admin.setEmail("admin");
+        admin.setSenha("$2a$15$RWQ4HVbd3VaJRQUoBRnn4.PonJYVy6shhXmufg/n3JxnIaD83dmDy");
+        admin.setNome("Administrador");
+        admin.setTipo(TipoUsuario.ADMIN);
+        userRepository.save(admin);
     }
 
     private void addInstituicoes() {

@@ -1,9 +1,9 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { useNavigate, useParams } from 'react-router-dom'
+import api from '@/api'
 import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import axios from 'axios'
 import { useToast } from "@/hooks/use-toast"
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useNavigate, useParams } from 'react-router-dom'
 
 interface Vantagem {
     id: number
@@ -14,12 +14,12 @@ interface Vantagem {
 }
 
 const buscarVantagens = async (empresaId: string): Promise<Vantagem[]> => {
-    const { data } = await axios.get(`http://localhost:8080/empresas/${empresaId}/vantagens`)
+    const { data } = await api.get(`/empresas/${empresaId}/vantagens`)
     return data
 }
 
 const excluirVantagem = async (empresaId: string, vantagemId: number): Promise<void> => {
-    await axios.delete(`http://localhost:8080/empresas/${empresaId}/vantagens/${vantagemId}`)
+    await api.delete(`/empresas/${empresaId}/vantagens/${vantagemId}`)
 }
 
 export default function ListaVantagens() {
