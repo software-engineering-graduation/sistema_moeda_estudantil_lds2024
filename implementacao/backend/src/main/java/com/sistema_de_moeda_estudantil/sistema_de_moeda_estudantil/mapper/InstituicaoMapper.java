@@ -15,16 +15,10 @@ public interface InstituicaoMapper {
     InstituicaoDTO toDTO(Instituicao instituicao);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "alunos", ignore = true)
-    @Mapping(target = "professores", ignore = true)
     Instituicao toEntity(InstituicaoCreate instituicaoCreate);
 
-    @Mapping(target = "alunos", ignore = true)
-    @Mapping(target = "professores", ignore = true)
     Instituicao toEntity(InstituicaoDTO instituicaoDTO);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "alunos", ignore = true)
-    @Mapping(target = "professores", ignore = true)
     void updateEntityFromDto(InstituicaoDTO instituicaoDto, @MappingTarget Instituicao instituicao);
 }
