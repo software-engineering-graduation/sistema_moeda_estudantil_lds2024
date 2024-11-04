@@ -19,6 +19,7 @@ public interface FuncionarioEmpresaMapper {
     
     @Mapping(target = "empresa", ignore = true)
     @Mapping(target = "tipo", ignore = true)
+    @Mapping(target = "saldoMoedas", ignore = true)
     FuncionarioEmpresa toEntity(FuncionarioEmpresaDTO funcionarioEmpresaDTO);
 
     FuncionarioEmpresaDTO toDTO(FuncionarioEmpresa funcionarioEmpresa);
@@ -28,9 +29,11 @@ public interface FuncionarioEmpresaMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "tipo", ignore = true)
     @Mapping(target = "empresa", ignore = true)
+    @Mapping(target = "saldoMoedas", ignore = true)
     FuncionarioEmpresa toEntity(FuncionarioEmpresaCreate funcionarioEmpresaCreate);
 
     @Mapping(target = "empresa", ignore = true)
     @Mapping(target = "tipo", ignore = true)
+    @Mapping(target = "saldoMoedas", ignore = true)
     void updateEntityFromDto(FuncionarioEmpresaDTO funcionarioEmpresaDto, @MappingTarget FuncionarioEmpresa funcionarioEmpresa);
 }
