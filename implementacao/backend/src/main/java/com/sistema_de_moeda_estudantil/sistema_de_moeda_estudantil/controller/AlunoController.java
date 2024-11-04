@@ -3,6 +3,8 @@ package com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.controller;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,11 +33,12 @@ public class AlunoController {
     private AlunoService alunoService;
 
     @GetMapping
-    public List<AlunoDTO> obterTodosAlunos() {
-        return alunoService.listarTodos();
+    public List<AlunoDTO> obterTodosAlunos(Authentication authentication) {
+        return alunoService.listarTodos(authentication);
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('PROFESSOR')")
     public ResponseEntity<AlunoDTO> obterAlunoPorId(@PathVariable Long id) {
         Optional<AlunoDTO> alunoDTO = alunoService.buscarPorId(id);
         return alunoDTO.map(ResponseEntity::ok)

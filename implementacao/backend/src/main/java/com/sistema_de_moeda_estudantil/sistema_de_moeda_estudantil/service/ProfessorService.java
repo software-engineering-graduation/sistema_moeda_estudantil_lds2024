@@ -15,11 +15,13 @@ import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.mapper.Transa
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.entity.Professor;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.repository.InstituicaoRepository;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.repository.ProfessorRepository;
+import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.repository.TransacaoRepository;
 
 @Service
 public class ProfessorService {
 
-    private final ProfessorRepository professorRepository;
+    @Autowired
+    private ProfessorRepository professorRepository;
 
     @Autowired
     private TransacaoMapper transacaoMapper;
@@ -29,6 +31,9 @@ public class ProfessorService {
 
     @Autowired
     private InstituicaoRepository instituicaoRepository;
+    
+    @Autowired
+    private TransacaoRepository transacaoRepository;
 
     public ProfessorService(ProfessorRepository professorRepository, ProfessorMapper professorMapper, TransacaoMapper transacaoMapper, InstituicaoRepository instituicaoRepository) {
         this.professorRepository = professorRepository;
@@ -70,7 +75,9 @@ public class ProfessorService {
     }
 
     public List<TransacaoDTO> getTransacoes(Long id) {
-        Professor professor = professorRepository.findById(id).orElseThrow(() -> new RuntimeException("Professor not found"));
-        return professor.getTransacoes().stream().map(transacaoMapper::toDTO).collect(Collectors.toList());
+        return transacaoRepository.findByOrigemIdOrDestinoId(id, id)
+                .stream()
+                .map(transacaoMapper::toDTO)
+                .collect(Collectors.toList());
     }
 }

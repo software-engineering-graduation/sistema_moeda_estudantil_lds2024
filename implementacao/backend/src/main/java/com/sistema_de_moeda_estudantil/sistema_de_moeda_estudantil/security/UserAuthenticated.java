@@ -13,7 +13,7 @@ public class UserAuthenticated implements UserDetails {
 
   public UserAuthenticated(Usuario user) {
     this.user = user;
-  }
+  };
 
   @Override
   public String getUsername() {

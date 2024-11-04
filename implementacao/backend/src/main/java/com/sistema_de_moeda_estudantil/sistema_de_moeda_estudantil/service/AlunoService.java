@@ -1,23 +1,28 @@
 package com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.service;
 
-import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.DTO.Aluno.AlunoCreate;
-import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.DTO.Aluno.AlunoDTO;
-import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.DTO.transacao.TransacaoDTO;
-import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.entity.Aluno;
-import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.entity.Instituicao;
-import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.enums.TipoUsuario;
-import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.mapper.AlunoMapper;
-import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.mapper.TransacaoMapper;
-import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.repository.AlunoRepository;
-import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.repository.InstituicaoRepository;
-
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Service;
+
+import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.DTO.Aluno.AlunoCreate;
+import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.DTO.Aluno.AlunoDTO;
+import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.DTO.transacao.TransacaoDTO;
+import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.entity.Aluno;
+import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.entity.Instituicao;
+import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.entity.Professor;
+import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.entity.Usuario;
+import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.enums.TipoUsuario;
+import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.mapper.AlunoMapper;
+import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.mapper.TransacaoMapper;
+import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.repository.AlunoRepository;
+import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.repository.InstituicaoRepository;
+import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.repository.ProfessorRepository;
+import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.repository.TransacaoRepository;
+import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.repository.UserRepository;
 
 @Service
 public class AlunoService {
@@ -34,10 +39,30 @@ public class AlunoService {
     @Autowired
     private TransacaoMapper transacaoMapper;
 
-    public List<AlunoDTO> listarTodos() {
-        return alunoRepository.findAll().stream()
-                .map(alunoMapper::toDTO)
-                .collect(Collectors.toList());
+    @Autowired
+    private TransacaoRepository transacaoRepository;
+    
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private ProfessorRepository professorRepository;
+
+    public List<AlunoDTO> listarTodos(Authentication authentication) {
+        Usuario usuario = userRepository.findByEmail(authentication.getName())
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        if(TipoUsuario.ADMIN.equals(usuario.getTipo())) {
+            return alunoRepository.findAll().stream()
+                    .map(alunoMapper::toDTO)
+                    .collect(Collectors.toList());
+        } else {
+            Professor professor = professorRepository.findByEmail(authentication.getName())
+                    .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+            return alunoRepository.findByInstituicaoId(professor.getInstituicao().getId()).stream()
+                    .map(alunoMapper::toDTO)
+                    .collect(Collectors.toList());
+        }
     }
 
     public Optional<AlunoDTO> buscarPorId(Long id) {
@@ -100,9 +125,7 @@ public class AlunoService {
     }
 
     public List<TransacaoDTO> listarTransacoes(Long id) {
-        return alunoRepository.findById(id)
-                .map(Aluno::getTransacoes)
-                .orElseThrow(() -> new IllegalArgumentException("Aluno não encontrado"))
+        return transacaoRepository.findByOrigemIdOrDestinoId(id, id)
                 .stream()
                 .map(transacaoMapper::toDTO)
                 .collect(Collectors.toList());

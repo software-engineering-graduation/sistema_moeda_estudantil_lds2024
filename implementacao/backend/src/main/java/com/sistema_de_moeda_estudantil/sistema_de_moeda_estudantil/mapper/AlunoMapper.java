@@ -22,18 +22,15 @@ public interface AlunoMapper {
     @Mapping(target = "saldoMoedas", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "tipo", ignore = true)
-    @Mapping(target = "transacoes", ignore = true)
     Aluno toEntity(AlunoCreate alunoCreate);
 
     @Mapping(target = "senha", ignore = true)
     @Mapping(target = "tipo", ignore = true)
-    @Mapping(target = "transacoes", ignore = true)
     Aluno toEntity(AlunoDTO alunoDTO);
 
     @Mapping(target = "tipo", ignore = true)
     @Mapping(target = "senha", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    @Mapping(target = "transacoes", ignore = true)
     void updateEntityFromDto(AlunoDTO alunoDto, @MappingTarget Aluno aluno);
 }
 
