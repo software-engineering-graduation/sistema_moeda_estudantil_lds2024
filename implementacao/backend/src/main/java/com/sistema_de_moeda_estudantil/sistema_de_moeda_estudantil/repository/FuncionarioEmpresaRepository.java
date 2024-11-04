@@ -8,9 +8,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface FuncionarioEmpresaRepository extends JpaRepository<FuncionarioEmpresa, Integer> {
+public interface FuncionarioEmpresaRepository extends JpaRepository<FuncionarioEmpresa, Long> {
         
-        List<FuncionarioEmpresa> findByEmpresaId(int empresaId);
+        List<FuncionarioEmpresa> findByEmpresaId(Long empresaId);
 
-        Optional<FuncionarioEmpresa> findByIdAndEmpresaId(int funcionarioId, int empresaId);
+        Optional<FuncionarioEmpresa> findByIdAndEmpresaId(Long funcionarioId, Long empresaId);
 }

@@ -26,7 +26,7 @@ public class AlunoCreate {
     private String endereco;
     private String curso;
 
-    private Integer instituicaoId;
+    private Long instituicaoId;
 }
 
 

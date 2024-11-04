@@ -20,5 +20,5 @@ public class FuncionarioEmpresaCreate {
     private String senha;
 
     @NotNull(message = "O id da empresa é obrigatório")
-    private Integer empresaId;
+    private Long empresaId;
 }

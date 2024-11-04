@@ -6,14 +6,14 @@ import lombok.Data;
 
 @Data
 public class AlunoDTO {
-    private int id;
+    private Long id;
     private String nome;
     private String email;
     private String cpf;
     private String rg;
     private String endereco;
     private String curso;
-    private int saldoMoedas;
+    private Long saldoMoedas;
     private Instituicao instituicao;
 }
 

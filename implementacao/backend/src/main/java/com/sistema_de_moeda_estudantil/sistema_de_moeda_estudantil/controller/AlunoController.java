@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.DTO.SenhaDTO;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.DTO.Aluno.AlunoCreate;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.DTO.Aluno.AlunoDTO;
+import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.DTO.transacao.TransacaoDTO;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.service.AlunoService;
 
 import jakarta.validation.Valid;
@@ -35,7 +36,7 @@ public class AlunoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AlunoDTO> obterAlunoPorId(@PathVariable int id) {
+    public ResponseEntity<AlunoDTO> obterAlunoPorId(@PathVariable Long id) {
         Optional<AlunoDTO> alunoDTO = alunoService.buscarPorId(id);
         return alunoDTO.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -48,22 +49,28 @@ public class AlunoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AlunoDTO> atualizarAluno(@PathVariable int id, @Valid @RequestBody AlunoDTO alunoCreate) {
+    public ResponseEntity<AlunoDTO> atualizarAluno(@PathVariable Long id, @Valid @RequestBody AlunoDTO alunoCreate) {
         Optional<AlunoDTO> alunoAtualizado = alunoService.atualizar(id, alunoCreate);
         return alunoAtualizado.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarAluno(@PathVariable int id) {
+    public ResponseEntity<Void> deletarAluno(@PathVariable Long id) {
         alunoService.deletarPorId(id);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}/senha")
-    public ResponseEntity<AlunoDTO> atualizarSenha(@PathVariable int id, @RequestBody SenhaDTO senhaDTO) {
+    public ResponseEntity<AlunoDTO> atualizarSenha(@PathVariable Long id, @RequestBody SenhaDTO senhaDTO) {
         Optional<AlunoDTO> alunoAtualizado = alunoService.atualizarSenha(id, senhaDTO.getSenhaAntiga(), senhaDTO.getNovaSenha());
         return alunoAtualizado.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/{id}/transacoes")
+    public ResponseEntity<List<TransacaoDTO>> obterTransacoes(@PathVariable Long id) {
+        List<TransacaoDTO> transacoes = alunoService.listarTransacoes(id);
+        return ResponseEntity.ok(transacoes);
     }
 }

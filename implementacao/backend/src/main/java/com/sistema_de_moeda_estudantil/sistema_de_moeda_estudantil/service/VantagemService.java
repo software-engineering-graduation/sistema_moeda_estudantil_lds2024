@@ -28,13 +28,13 @@ public class VantagemService {
 
     private final VantagemMapper vantagemMapper = VantagemMapper.INSTANCE;
 
-    public List<VantagemDTO> getByEmpresaId(int empresaId) {
+    public List<VantagemDTO> getByEmpresaId(Long empresaId) {
         return vantagemRepository.findByEmpresaId(empresaId).stream()
                 .map(vantagemMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
-    public VantagemDTO create(int empresaId, VantagemCreate vantagemCreate) {
+    public VantagemDTO create(Long empresaId, VantagemCreate vantagemCreate) {
         Empresa empresa = empresaRepository.findById(empresaId)
                 .orElseThrow(() -> new EntityNotFoundException("Empresa não encontrada"));
 
@@ -44,7 +44,7 @@ public class VantagemService {
         return vantagemMapper.toDTO(vantagemRepository.save(vantagem));
     }
 
-    public VantagemDTO update(int empresaId, int vantagemId, VantagemDTO vantagemUpdate) {
+    public VantagemDTO update(Long empresaId, Long vantagemId, VantagemDTO vantagemUpdate) {
         Vantagem vantagem = vantagemRepository.findByIdAndEmpresaId(vantagemId, empresaId)
                 .orElseThrow(() -> new EntityNotFoundException("Vantagem não encontrada"));
 
@@ -53,12 +53,12 @@ public class VantagemService {
         return vantagemMapper.toDTO(vantagemRepository.save(vantagem));
     }
 
-    public Optional<VantagemDTO> getById(int empresaId, int vantagemId) {
+    public Optional<VantagemDTO> getById(Long empresaId, Long vantagemId) {
         return vantagemRepository.findByIdAndEmpresaId(vantagemId, empresaId)
                 .map(vantagemMapper::toDTO);
     }
 
-    public void delete(int empresaId, int vantagemId) {
+    public void delete(Long empresaId, Long vantagemId) {
         Vantagem vantagem = vantagemRepository.findByIdAndEmpresaId(vantagemId, empresaId)
                 .orElseThrow(() -> new EntityNotFoundException("Vantagem não encontrada"));
         vantagemRepository.delete(vantagem);

@@ -33,7 +33,7 @@ public class FuncionarioEmpresaService {
         this.empresaRepository = empresaRepository;
     }
 
-    public FuncionarioEmpresaDTO getById(int id) {
+    public FuncionarioEmpresaDTO getById(Long id) {
         FuncionarioEmpresa funcionario = funcionarioEmpresaRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Funcionário não encontrado com id: " + id));
         return mapper.toDTO(funcionario);
@@ -46,14 +46,14 @@ public class FuncionarioEmpresaService {
                 .collect(Collectors.toList());
     }
 
-    public List<FuncionarioEmpresaDTO> getByEmpresaId(int empresaId) {
+    public List<FuncionarioEmpresaDTO> getByEmpresaId(Long empresaId) {
         List<FuncionarioEmpresa> funcionarios = funcionarioEmpresaRepository.findByEmpresaId(empresaId);
         return funcionarios.stream()
                 .map(mapper::toDTO)
                 .collect(Collectors.toList());
     }
 
-    public FuncionarioEmpresaDTO create(int empresaId, FuncionarioEmpresaCreate createDTO) {
+    public FuncionarioEmpresaDTO create(Long empresaId, FuncionarioEmpresaCreate createDTO) {
         Empresa empresa = empresaRepository.findById(empresaId)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Empresa não encontrada com id: " + createDTO.getEmpresaId()));
@@ -62,7 +62,7 @@ public class FuncionarioEmpresaService {
         return mapper.toDTO(funcionarioEmpresaRepository.save(funcionario));
     }
 
-    public FuncionarioEmpresaDTO update(int empresaId, int funcionarioId, FuncionarioEmpresaDTO updateDTO) {
+    public FuncionarioEmpresaDTO update(Long empresaId, Long funcionarioId, FuncionarioEmpresaDTO updateDTO) {
         FuncionarioEmpresa funcionario = funcionarioEmpresaRepository.findById(funcionarioId)
                 .orElseThrow(() -> new EntityNotFoundException("Funcionário não encontrado com id: " + funcionarioId));
         Empresa empresa = empresaRepository.findById(empresaId)
@@ -73,18 +73,18 @@ public class FuncionarioEmpresaService {
         return mapper.toDTO(funcionarioEmpresaRepository.save(funcionario));
     }
 
-    public void delete(int id) {
+    public void delete(Long id) {
         FuncionarioEmpresa funcionario = funcionarioEmpresaRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Funcionário não encontrado com id: " + id));
         funcionarioEmpresaRepository.delete(funcionario);
     }
 
-    public Optional<FuncionarioEmpresaDTO> getById(int empresaId, int funcionarioId) {
+    public Optional<FuncionarioEmpresaDTO> getById(Long empresaId, Long funcionarioId) {
         Optional<FuncionarioEmpresa> funcionario = funcionarioEmpresaRepository.findByIdAndEmpresaId(funcionarioId, empresaId);
         return funcionario.map(mapper::toDTO);
     }
 
-    public Optional<FuncionarioEmpresaDTO> atualizarSenha(int empresaId, int funcionarioId, String senhaAntiga, String novaSenha) {
+    public Optional<FuncionarioEmpresaDTO> atualizarSenha(Long empresaId, Long funcionarioId, String senhaAntiga, String novaSenha) {
         Optional<FuncionarioEmpresa> funcinarioExistente = funcionarioEmpresaRepository.findById(funcionarioId);
 
         if (funcinarioExistente.isPresent()) {

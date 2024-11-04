@@ -76,7 +76,7 @@ public class DataInitializer implements CommandLineRunner {
         aluno.setRg("12.345.678-9");
         aluno.setEndereco("Avenida Expresso, 150, Belo Horizonte - MG, 70707-070");
         aluno.setCurso("Engenharia de Software");
-        aluno.setSaldoMoedas(100);
+        aluno.setSaldoMoedas(100.0);
         aluno.setInstituicao(instituicaoRepository.findAll().get(0)); // First institution
         alunoRepository.save(aluno);
 
@@ -88,7 +88,7 @@ public class DataInitializer implements CommandLineRunner {
         aluno2.setRg("98.765.432-1");
         aluno2.setEndereco("Avenida Central, 200, São Paulo - SP, 80808-080");
         aluno2.setCurso("Engenharia de Software");
-        aluno2.setSaldoMoedas(100);
+        aluno2.setSaldoMoedas(100.0);
         aluno2.setInstituicao(instituicaoRepository.findAll().get(0)); // First institution
         alunoRepository.save(aluno2);
 
@@ -101,7 +101,7 @@ public class DataInitializer implements CommandLineRunner {
         aluno3.setRg("32.165.498-7");
         aluno3.setEndereco("Rua Verde, 300, Rio de Janeiro - RJ, 90909-090");
         aluno3.setCurso("Ciência da Computação");
-        aluno3.setSaldoMoedas(80);
+        aluno3.setSaldoMoedas(80.0);
         aluno3.setInstituicao(instituicaoRepository.findAll().get(1)); // Second institution
         alunoRepository.save(aluno3);
 
@@ -113,7 +113,7 @@ public class DataInitializer implements CommandLineRunner {
         aluno4.setRg("65.432.198-7");
         aluno4.setEndereco("Rua Azul, 400, Curitiba - PR, 60606-060");
         aluno4.setCurso("Sistemas de Informação");
-        aluno4.setSaldoMoedas(5);
+        aluno4.setSaldoMoedas(5.0);
         aluno4.setInstituicao(instituicaoRepository.findAll().get(1)); // Second institution
         alunoRepository.save(aluno4);
     }
@@ -162,15 +162,15 @@ public class DataInitializer implements CommandLineRunner {
         Vantagem vantagem1 = new Vantagem();
         vantagem1.setDescricao("Desconto de 10% em qualquer produto");
         vantagem1.setFoto("https://thumbs.dreamstime.com/b/disconto-de-88000109.jpg");
-        vantagem1.setCustoMoedas(10);
-        vantagem1.setQuantidadeDisponivel(100);
+        vantagem1.setCustoMoedas(10.0);
+        vantagem1.setQuantidadeDisponivel(100.0);
         vantagem1.setEmpresa(empresa);
 
         Vantagem vantagem2 = new Vantagem();
         vantagem2.setDescricao("Desconto de 20% em qualquer produto");
         vantagem2.setFoto("https://cdn.shopify.com/s/files/1/0817/7988/4088/articles/4XOfcVjU6L9Z0yxkgW0WeI_c472c5fd-a7d2-4075-ba11-944a3f40ceb4.jpg?v=1719388916&originalWidth=1848&originalHeight=782");
-        vantagem2.setCustoMoedas(20);
-        vantagem2.setQuantidadeDisponivel(50);
+        vantagem2.setCustoMoedas(20.0);
+        vantagem2.setQuantidadeDisponivel(50.0);
         vantagem2.setEmpresa(empresa);
 
         vantagens.add(vantagem1);

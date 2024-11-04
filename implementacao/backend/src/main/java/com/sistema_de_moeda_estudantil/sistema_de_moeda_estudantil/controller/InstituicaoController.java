@@ -28,7 +28,7 @@ public class InstituicaoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<InstituicaoDTO> getById(@PathVariable int id) {
+    public ResponseEntity<InstituicaoDTO> getById(@PathVariable Long id) {
         InstituicaoDTO instituicaoDTO = instituicaoService.getById(id);
         return ResponseEntity.ok(instituicaoDTO);
     }
@@ -46,14 +46,14 @@ public class InstituicaoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<InstituicaoDTO> update(@PathVariable int id,
+    public ResponseEntity<InstituicaoDTO> update(@PathVariable Long id,
             @RequestBody @Validated InstituicaoDTO updateDTO) {
         InstituicaoDTO instituicaoDTO = instituicaoService.update(id, updateDTO);
         return ResponseEntity.ok(instituicaoDTO);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable int id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         instituicaoService.delete(id);
         return ResponseEntity.noContent().build();
     }

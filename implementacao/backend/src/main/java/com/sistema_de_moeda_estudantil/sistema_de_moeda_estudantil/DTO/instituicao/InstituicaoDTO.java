@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class InstituicaoDTO {
-    private int id;
+    private Long id;
     private String nome;
     private String endereco;
 }

@@ -6,14 +6,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.entity.Vantagem;
 
-public interface VantagemRepository extends JpaRepository<Vantagem, Integer> {
+public interface VantagemRepository extends JpaRepository<Vantagem, Long> {
     /**
      * Find all vantagens associated with a specific empresa.
      *
      * @param empresaId the ID of the empresa
      * @return a list of vantagens
      */
-    List<Vantagem> findByEmpresaId(int empresaId);
+    List<Vantagem> findByEmpresaId(Long empresaId);
 
     /**
      * Find a specific vantagem by its ID and associated empresa ID.
@@ -22,14 +22,14 @@ public interface VantagemRepository extends JpaRepository<Vantagem, Integer> {
      * @param empresaId the ID of the empresa
      * @return an Optional containing the vantagem if found, or empty if not found
      */
-    Optional<Vantagem> findByIdAndEmpresaId(int id, int empresaId);
+    Optional<Vantagem> findByIdAndEmpresaId(Long id, Long empresaId);
 
     /**
      * Delete all vantagens associated with a specific empresa.
      *
      * @param empresaId the ID of the empresa
      */
-    void deleteByEmpresaId(int empresaId);
+    void deleteByEmpresaId(Long empresaId);
 
     /**
      * Check if a vantagem exists for a given empresa.
@@ -38,5 +38,5 @@ public interface VantagemRepository extends JpaRepository<Vantagem, Integer> {
      * @param empresaId the ID of the empresa
      * @return true if the vantagem exists, false otherwise
      */
-    boolean existsByIdAndEmpresaId(int id, int empresaId);
+    boolean existsByIdAndEmpresaId(Long id, Long empresaId);
 }

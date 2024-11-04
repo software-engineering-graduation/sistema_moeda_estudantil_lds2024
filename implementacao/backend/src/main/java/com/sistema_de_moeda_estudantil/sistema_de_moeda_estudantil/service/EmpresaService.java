@@ -29,7 +29,7 @@ public class EmpresaService {
                 .collect(Collectors.toList());
     }
 
-    public Optional<EmpresaDTO> buscarPorId(int id) {
+    public Optional<EmpresaDTO> buscarPorId(Long id) {
         return empresaRepository.findById(id)
                 .map(mapper::toDTO);
     }
@@ -40,7 +40,7 @@ public class EmpresaService {
         return mapper.toDTO(savedEmpresa);
     }
 
-    public Optional<EmpresaDTO> atualizar(int id, EmpresaCreate empresaCreate) {
+    public Optional<EmpresaDTO> atualizar(Long id, EmpresaCreate empresaCreate) {
         Optional<Empresa> empresaExistente = empresaRepository.findById(id);
 
         if (empresaExistente.isPresent()) {
@@ -53,7 +53,7 @@ public class EmpresaService {
         }
     }
 
-    public void deletarPorId(int id) {
+    public void deletarPorId(Long id) {
         empresaRepository.deleteById(id);
     }
 

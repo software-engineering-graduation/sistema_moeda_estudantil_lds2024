@@ -10,19 +10,16 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Aluno extends Usuario {
+public class Professor extends Usuario {
 
     private String cpf;
-    private String rg;
-    private String endereco;
-    private String curso;
-    private Double saldoMoedas;
+    private String departamento;
+    private Double saldoDeMoedas;
 
     @ManyToOne
     @JoinColumn(name = "instituicao_id")
     private Instituicao instituicao;
 
-    @OneToMany(mappedBy = "destino")
+    @OneToMany(mappedBy = "origem")
     private List<Transacao> transacoes;
 }
-

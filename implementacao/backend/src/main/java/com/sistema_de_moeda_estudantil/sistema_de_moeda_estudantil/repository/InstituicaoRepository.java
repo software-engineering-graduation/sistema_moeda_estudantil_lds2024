@@ -4,5 +4,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.entity.Instituicao;
 
-public interface InstituicaoRepository extends JpaRepository<Instituicao, Integer> {
+public interface InstituicaoRepository extends JpaRepository<Instituicao, Long> {
 }

@@ -26,7 +26,7 @@ public class InstituicaoService {
         this.instituicaoMapper = instituicaoMapper;
     }
 
-    public InstituicaoDTO getById(int id) {
+    public InstituicaoDTO getById(Long id) {
         Instituicao instituicao = instituicaoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Instituicao não encontrada com id: " + id));
         return instituicaoMapper.toDTO(instituicao);
@@ -45,7 +45,7 @@ public class InstituicaoService {
         return instituicaoMapper.toDTO(savedInstituicao);
     }
 
-    public InstituicaoDTO update(int id, InstituicaoDTO instituicaoDto) {
+    public InstituicaoDTO update(Long id, InstituicaoDTO instituicaoDto) {
         Instituicao instituicao = instituicaoRepository.findById(id)
                 .orElseThrow();
         instituicaoMapper.updateEntityFromDto(instituicaoDto, instituicao);
@@ -53,7 +53,7 @@ public class InstituicaoService {
         return instituicaoMapper.toDTO(updatedInstituicao);
     }
 
-    public void delete(int id) {
+    public void delete(Long id) {
         Instituicao instituicao = instituicaoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Instituição não encontrada com id: " + id));
         instituicaoRepository.delete(instituicao);

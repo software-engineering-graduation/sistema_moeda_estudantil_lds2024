@@ -12,13 +12,13 @@ public class Empresa{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     private String nome;
 
     private String cnpj;
 
-    private int saldoMoedas;
+    private Double saldoMoedas;
 
     @OneToMany(mappedBy = "empresa", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Vantagem> vantagens;

@@ -4,8 +4,8 @@ import lombok.Data;
 
 @Data
 public class EmpresaDTO {
-    private int id;
+    private Long id;
     private String nome;
     private String cnpj;
-    private int saldoMoedas;
+    private Long saldoMoedas;
 }

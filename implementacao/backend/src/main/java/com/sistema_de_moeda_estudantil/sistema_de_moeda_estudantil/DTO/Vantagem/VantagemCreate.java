@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 public class VantagemCreate {
     private String descricao;
     private String foto;
-    private int custoMoedas;
-    private int quantidadeDisponivel;
+    private Long custoMoedas;
+    private Long quantidadeDisponivel;
 }

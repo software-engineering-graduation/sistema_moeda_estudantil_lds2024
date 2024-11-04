@@ -45,7 +45,7 @@ public class EmpresaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EmpresaDTO> obterEmpresaPorId(@PathVariable int id) {
+    public ResponseEntity<EmpresaDTO> obterEmpresaPorId(@PathVariable Long id) {
         Optional<EmpresaDTO> empresaDTO = empresaService.buscarPorId(id);
         return empresaDTO.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -58,50 +58,50 @@ public class EmpresaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<EmpresaDTO> atualizarEmpresa(@PathVariable int id, @RequestBody EmpresaCreate empresaCreate) {
+    public ResponseEntity<EmpresaDTO> atualizarEmpresa(@PathVariable Long id, @RequestBody EmpresaCreate empresaCreate) {
         Optional<EmpresaDTO> empresaAtualizada = empresaService.atualizar(id, empresaCreate);
         return empresaAtualizada.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarEmpresa(@PathVariable int id) {
+    public ResponseEntity<Void> deletarEmpresa(@PathVariable Long id) {
         empresaService.deletarPorId(id);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{empresaId}/funcionarios")
-    public ResponseEntity<List<FuncionarioEmpresaDTO>> obterFuncionariosPorEmpresaId(@PathVariable int empresaId) {
+    public ResponseEntity<List<FuncionarioEmpresaDTO>> obterFuncionariosPorEmpresaId(@PathVariable Long empresaId) {
         List<FuncionarioEmpresaDTO> funcionarios = funcionarioEmpresaService.getByEmpresaId(empresaId);
         return ResponseEntity.ok(funcionarios);
     }
 
     @PostMapping("/{empresaId}/funcionarios")
-    public ResponseEntity<FuncionarioEmpresaDTO> criarFuncionario(@PathVariable int empresaId,
+    public ResponseEntity<FuncionarioEmpresaDTO> criarFuncionario(@PathVariable Long empresaId,
             @RequestBody FuncionarioEmpresaCreate funcionarioCreate) {
         FuncionarioEmpresaDTO funcionarioCriado = funcionarioEmpresaService.create(empresaId, funcionarioCreate);
         return ResponseEntity.status(HttpStatus.CREATED).body(funcionarioCriado);
     }
 
     @PutMapping("/{empresaId}/funcionarios/{funcionarioId}")
-    public ResponseEntity<FuncionarioEmpresaDTO> atualizarFuncionario(@PathVariable int empresaId,
-            @PathVariable int funcionarioId, @RequestBody FuncionarioEmpresaDTO funcionarioUpdate) {
+    public ResponseEntity<FuncionarioEmpresaDTO> atualizarFuncionario(@PathVariable Long empresaId,
+            @PathVariable Long funcionarioId, @RequestBody FuncionarioEmpresaDTO funcionarioUpdate) {
         FuncionarioEmpresaDTO funcionarioAtualizado = funcionarioEmpresaService.update(empresaId, funcionarioId,
                 funcionarioUpdate);
         return ResponseEntity.ok(funcionarioAtualizado);
     }
 
     @GetMapping("/{empresaId}/funcionarios/{funcionarioId}")
-    public ResponseEntity<FuncionarioEmpresaDTO> obterFuncionarioPorId(@PathVariable int empresaId,
-            @PathVariable int funcionarioId) {
+    public ResponseEntity<FuncionarioEmpresaDTO> obterFuncionarioPorId(@PathVariable Long empresaId,
+            @PathVariable Long funcionarioId) {
         Optional<FuncionarioEmpresaDTO> funcionario = funcionarioEmpresaService.getById(empresaId, funcionarioId);
         return funcionario.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{empresaId}/funcionarios/{funcionarioId}/senha")
-    public ResponseEntity<FuncionarioEmpresaDTO> atualizarSenha(@PathVariable int empresaId,
-            @PathVariable int funcionarioId, @RequestBody SenhaDTO senhaDTO) {
+    public ResponseEntity<FuncionarioEmpresaDTO> atualizarSenha(@PathVariable Long empresaId,
+            @PathVariable Long funcionarioId, @RequestBody SenhaDTO senhaDTO) {
         Optional<FuncionarioEmpresaDTO> funcionarioAtualizado = funcionarioEmpresaService.atualizarSenha(empresaId,
                 funcionarioId, senhaDTO.getSenhaAntiga(),
                 senhaDTO.getNovaSenha());
@@ -110,41 +110,41 @@ public class EmpresaController {
     }
 
     @DeleteMapping("/{empresaId}/funcionarios/{id}")
-    public ResponseEntity<Void> deletarFuncionario(@PathVariable int empresaId, @PathVariable int id) {
+    public ResponseEntity<Void> deletarFuncionario(@PathVariable Long empresaId, @PathVariable Long id) {
         funcionarioEmpresaService.delete(id);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{empresaId}/vantagens")
-    public ResponseEntity<List<VantagemDTO>> obterVantagensPorEmpresaId(@PathVariable int empresaId) {
+    public ResponseEntity<List<VantagemDTO>> obterVantagensPorEmpresaId(@PathVariable Long empresaId) {
         List<VantagemDTO> vantagens = vantagemService.getByEmpresaId(empresaId);
         return ResponseEntity.ok(vantagens);
     }
 
     @PostMapping("/{empresaId}/vantagens")
-    public ResponseEntity<VantagemDTO> criarVantagem(@PathVariable int empresaId,
+    public ResponseEntity<VantagemDTO> criarVantagem(@PathVariable Long empresaId,
             @RequestBody VantagemCreate vantagemCreate) {
         VantagemDTO vantagemCriada = vantagemService.create(empresaId, vantagemCreate);
         return ResponseEntity.status(HttpStatus.CREATED).body(vantagemCriada);
     }
 
     @PutMapping("/{empresaId}/vantagens/{vantagemId}")
-    public ResponseEntity<VantagemDTO> atualizarVantagem(@PathVariable int empresaId,
-            @PathVariable int vantagemId, @RequestBody VantagemDTO vantagemUpdate) {
+    public ResponseEntity<VantagemDTO> atualizarVantagem(@PathVariable Long empresaId,
+            @PathVariable Long vantagemId, @RequestBody VantagemDTO vantagemUpdate) {
         VantagemDTO vantagemAtualizada = vantagemService.update(empresaId, vantagemId, vantagemUpdate);
         return ResponseEntity.ok(vantagemAtualizada);
     }
 
     @GetMapping("/{empresaId}/vantagens/{vantagemId}")
-    public ResponseEntity<VantagemDTO> obterVantagemPorId(@PathVariable int empresaId,
-            @PathVariable int vantagemId) {
+    public ResponseEntity<VantagemDTO> obterVantagemPorId(@PathVariable Long empresaId,
+            @PathVariable Long vantagemId) {
         Optional<VantagemDTO> vantagem = vantagemService.getById(empresaId, vantagemId);
         return vantagem.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{empresaId}/vantagens/{vantagemId}")
-    public ResponseEntity<Void> deletarVantagem(@PathVariable int empresaId, @PathVariable int vantagemId) {
+    public ResponseEntity<Void> deletarVantagem(@PathVariable Long empresaId, @PathVariable Long vantagemId) {
         vantagemService.delete(empresaId, vantagemId);
         return ResponseEntity.noContent().build();
     }

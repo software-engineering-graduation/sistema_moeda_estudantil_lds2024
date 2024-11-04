@@ -11,12 +11,12 @@ public class Vantagem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     private String descricao;
     private String foto;
-    private int custoMoedas;
-    private int quantidadeDisponivel;
+    private Double custoMoedas;
+    private Double quantidadeDisponivel;
 
     @ManyToOne
     @JoinColumn(name = "empresa_id")
