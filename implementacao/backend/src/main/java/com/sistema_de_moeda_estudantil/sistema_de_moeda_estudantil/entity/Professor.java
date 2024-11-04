@@ -1,9 +1,12 @@
 package com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
-
-import java.util.List;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
@@ -14,12 +17,8 @@ public class Professor extends Usuario {
 
     private String cpf;
     private String departamento;
-    private Double saldoDeMoedas;
 
     @ManyToOne
     @JoinColumn(name = "instituicao_id")
     private Instituicao instituicao;
-
-    @OneToMany(mappedBy = "origem")
-    private List<Transacao> transacoes;
 }

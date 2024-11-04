@@ -3,12 +3,10 @@ package com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,8 +26,8 @@ public class TransacaoController {
     }
 
     @PostMapping("/transferir")
-    public ResponseEntity<TransacaoDTO> transferir(@RequestBody @Validated TransacaoCreate createDTO) {
-        TransacaoDTO transacaoDTO = transacaoService.enviarMoedas(createDTO);
+    public ResponseEntity<TransacaoDTO> transferir(@RequestBody @Validated TransacaoCreate createDTO, Authentication authentication) {
+        TransacaoDTO transacaoDTO = transacaoService.enviarMoedas(createDTO, authentication);
         return ResponseEntity.ok(transacaoDTO);
     }
 
@@ -38,5 +36,10 @@ public class TransacaoController {
         transacaoService.reabastecerSaldoProfessores();
         return ResponseEntity.ok().build();
     }
-    
+
+    @GetMapping
+    public ResponseEntity<List<TransacaoDTO>> listarTransacoes(Authentication authentication) {
+        List<TransacaoDTO> transacoes = transacaoService.listarTransacoes(authentication);
+        return ResponseEntity.ok(transacoes);
+    }
 }

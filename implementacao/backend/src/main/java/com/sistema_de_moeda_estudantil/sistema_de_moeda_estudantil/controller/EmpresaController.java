@@ -26,6 +26,8 @@ import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.service.Empre
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.service.FuncionarioEmpresaService;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.service.VantagemService;
 
+import jakarta.annotation.security.RolesAllowed;
+
 @RestController
 @RequestMapping("/empresas")
 public class EmpresaController {
@@ -39,12 +41,14 @@ public class EmpresaController {
     @Autowired
     private VantagemService vantagemService;
 
+    @RolesAllowed({ "ROLE_ADMIN" })
     @GetMapping
     public List<EmpresaDTO> obterTodasEmpresas() {
         return empresaService.listarTodas();
     }
 
     @GetMapping("/{id}")
+    @RolesAllowed({ "ROLE_EMPRESA" })
     public ResponseEntity<EmpresaDTO> obterEmpresaPorId(@PathVariable Long id) {
         Optional<EmpresaDTO> empresaDTO = empresaService.buscarPorId(id);
         return empresaDTO.map(ResponseEntity::ok)

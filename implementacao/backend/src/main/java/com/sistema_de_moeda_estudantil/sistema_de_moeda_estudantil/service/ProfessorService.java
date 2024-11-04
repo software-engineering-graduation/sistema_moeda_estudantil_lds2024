@@ -14,18 +14,19 @@ import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.mapper.Profes
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.mapper.TransacaoMapper;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.entity.Professor;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.repository.ProfessorRepository;
+import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.repository.TransacaoRepository;
 
 @Service
 public class ProfessorService {
 
-    private final ProfessorRepository professorRepository;
+    @Autowired
+    private ProfessorRepository professorRepository;
 
     @Autowired
     private TransacaoMapper transacaoMapper;
-
-    public ProfessorService(ProfessorRepository professorRepository) {
-        this.professorRepository = professorRepository;
-    }
+    
+    @Autowired
+    private TransacaoRepository transacaoRepository;
 
     @Transactional(readOnly = true)
     public ProfessorDTO getById(Long id) {
@@ -60,7 +61,9 @@ public class ProfessorService {
     }
 
     public List<TransacaoDTO> getTransacoes(Long id) {
-        Professor professor = professorRepository.findById(id).orElseThrow(() -> new RuntimeException("Professor not found"));
-        return professor.getTransacoes().stream().map(transacaoMapper::toDTO).collect(Collectors.toList());
+        return transacaoRepository.findByOrigemIdOrDestinoId(id, id)
+                .stream()
+                .map(transacaoMapper::toDTO)
+                .collect(Collectors.toList());
     }
 }

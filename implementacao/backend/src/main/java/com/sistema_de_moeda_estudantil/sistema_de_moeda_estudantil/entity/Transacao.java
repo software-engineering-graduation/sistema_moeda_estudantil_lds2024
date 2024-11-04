@@ -21,7 +21,7 @@ public class Transacao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDateTime data;
+    private LocalDateTime data = LocalDateTime.now();
 
     private Double valor;
 

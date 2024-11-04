@@ -1,56 +1,21 @@
-import { useState } from 'react'
-import { useMutation } from '@tanstack/react-query'
-import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
 import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { useToast } from "@/hooks/use-toast"
-
-interface LoginCredentials {
-    username: string
-    password: string
-}
-
-const login = async (credentials: LoginCredentials): Promise<string> => {
-    const basicAuth = btoa(`${credentials.username}:${credentials.password}`)
-    const { data } = await axios.post('http://localhost:8080/authenticate', null, {
-        headers: {
-            'Authorization': `Basic ${basicAuth}`
-        }
-    })
-    return data
-}
+import { useLogin } from '@/hooks/useAuth'
+import { useState } from 'react'
 
 export default function Login() {
-    const [username, setUsername] = useState('')
-    const [password, setPassword] = useState('')
-    const navigate = useNavigate()
-    const { toast } = useToast()
-
-    const loginMutation = useMutation({
-        mutationFn: login,
-        onSuccess: (token) => {
-            localStorage.setItem('token', token)
-            toast({
-                title: "Sucesso",
-                description: "Login realizado com sucesso!",
-            })
-            navigate('/dashboard')
-        },
-        onError: (error) => {
-            toast({
-                title: "Erro",
-                description: `Erro ao fazer login: ${(error as Error).message}`,
-                variant: "destructive",
-            })
-        },
+    const [credentials, setCredentials] = useState({
+        username: '',
+        password: ''
     })
+
+    const loginMutation = useLogin()
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
-        loginMutation.mutate({ username, password })
+        loginMutation.mutate(credentials)
     }
 
     return (
@@ -67,8 +32,11 @@ export default function Login() {
                             <Input
                                 id="username"
                                 type="text"
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
+                                value={credentials.username}
+                                onChange={(e) => setCredentials(prev => ({
+                                    ...prev,
+                                    username: e.target.value
+                                }))}
                                 required
                             />
                         </div>
@@ -77,12 +45,19 @@ export default function Login() {
                             <Input
                                 id="password"
                                 type="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
+                                value={credentials.password}
+                                onChange={(e) => setCredentials(prev => ({
+                                    ...prev,
+                                    password: e.target.value
+                                }))}
                                 required
                             />
                         </div>
-                        <Button type="submit" className="w-full" disabled={loginMutation.isPending}>
+                        <Button
+                            type="submit"
+                            className="w-full"
+                            disabled={loginMutation.isPending}
+                        >
                             {loginMutation.isPending ? 'Entrando...' : 'Entrar'}
                         </Button>
                     </form>

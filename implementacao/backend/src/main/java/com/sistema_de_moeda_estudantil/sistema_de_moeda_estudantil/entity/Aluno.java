@@ -16,13 +16,9 @@ public class Aluno extends Usuario {
     private String rg;
     private String endereco;
     private String curso;
-    private Double saldoMoedas;
 
     @ManyToOne
     @JoinColumn(name = "instituicao_id")
     private Instituicao instituicao;
-
-    @OneToMany(mappedBy = "destino")
-    private List<Transacao> transacoes;
 }
 
