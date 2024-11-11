@@ -1,0 +1,81 @@
+@startuml
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 20
+skinparam maxmessagesize 60
+skinparam sequenceParticipant underline
+
+actor "Aluno" as student
+participant "VantagemController" as controller
+participant "VantagemService" as service
+participant "AlunoRepository" as alunoRepo
+participant "VantagemRepository" as vantagemRepo
+participant "CupomResgateRepository" as cupomRepo
+
+student -> controller: POST /vantagens/resgatar\n(alunoId, vantagemId)
+activate controller
+
+controller -> service: resgatarVantagem(alunoId, vantagemId)
+activate service
+
+service -> alunoRepo: findById(alunoId)
+activate alunoRepo
+
+alt Aluno encontrado
+    alunoRepo --> service: aluno
+else  Aluno não encontrado
+    alunoRepo --> service: EntityNotFoundException
+    service --> student: "Aluno não encontrado"
+    destroy service
+end
+deactivate alunoRepo
+
+service -> vantagemRepo: findById(vantagemId)
+activate vantagemRepo
+
+alt Vantagem encontrada
+    vantagemRepo --> service: vantagem
+else  Vantagem não encontrada
+    vantagemRepo --> service: EntityNotFoundException
+    service --> student: "Vantagem não encontrada"
+    destroy service
+end
+deactivate vantagemRepo
+
+alt Saldo suficiente
+    service -> service: verificar saldo suficiente
+else  Saldo insuficiente
+    service --> student: "Saldo insuficiente"
+    destroy service
+end
+
+alt Quantidade disponível
+    service -> service: verificar quantidade disponível
+else  Vantagem esgotada
+    service --> student: "Vantagem esgotada"
+    destroy service
+end
+
+service -> alunoRepo: save(aluno com saldo atualizado)
+activate alunoRepo
+alunoRepo --> service: aluno atualizado
+deactivate alunoRepo
+
+service -> vantagemRepo: save(vantagem com quantidade atualizada)
+activate vantagemRepo
+vantagemRepo --> service: vantagem atualizada
+deactivate vantagemRepo
+
+service -> service: gerar código do cupom
+
+service -> cupomRepo: save(novo cupomResgate)
+activate cupomRepo
+cupomRepo --> service: cupomResgate salvo
+deactivate cupomRepo
+
+service --> controller: CupomResgateDTO
+deactivate service
+
+controller --> student: Cupom gerado com sucesso
+deactivate controller
+
+@enduml
