@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.DTO.FuncionarioEmpresa.FuncionarioEmpresaCreate;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.DTO.FuncionarioEmpresa.FuncionarioEmpresaDTO;
-import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.entity.Aluno;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.entity.Empresa;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.entity.FuncionarioEmpresa;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.mapper.FuncionarioEmpresaMapper;

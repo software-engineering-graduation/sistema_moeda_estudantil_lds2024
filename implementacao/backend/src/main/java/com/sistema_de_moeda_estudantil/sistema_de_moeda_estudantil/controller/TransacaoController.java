@@ -26,7 +26,8 @@ public class TransacaoController {
     }
 
     @PostMapping("/transferir")
-    public ResponseEntity<TransacaoDTO> transferir(@RequestBody @Validated TransacaoCreate createDTO, Authentication authentication) {
+    public ResponseEntity<TransacaoDTO> transferir(@RequestBody @Validated TransacaoCreate createDTO,
+            Authentication authentication) {
         TransacaoDTO transacaoDTO = transacaoService.enviarMoedas(createDTO, authentication);
         return ResponseEntity.ok(transacaoDTO);
     }

@@ -15,6 +15,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '@/contexts/AuthContext'
 
 interface Aluno {
     id: number
@@ -41,8 +42,9 @@ export default function FormularioTransacao() {
     const { toast } = useToast()
     const navigate = useNavigate()
     const queryClient = useQueryClient()
+    const { user } = useAuth()
     const [transacao, setTransacao] = useState<TransacaoCreate>({
-        origem: 0,
+        origem: user?.id,
         destino: 0,
         valor: 0,
         mensagem: '',
@@ -85,27 +87,6 @@ export default function FormularioTransacao() {
     return (
         <form onSubmit={handleSubmit} className="space-y-4" >
             <h1 className="text-3xl font-bold mb-4" > Nova Transferência </h1>
-
-            <div>
-                <Label htmlFor="origem">Aluno Remetente</Label>
-                <Select
-                    onValueChange={(value) => setTransacao(prev => ({ ...prev, origem: Number(value) }))}
-                    required
-                >
-                    <SelectTrigger>
-                        <SelectValue placeholder="Selecione um aluno" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        {
-                            alunos.map(aluno => (
-                                <SelectItem key={aluno.id} value={aluno.id.toString()} >
-                                    {aluno.nome}
-                                </SelectItem>
-                            ))
-                        }
-                    </SelectContent>
-                </Select>
-            </div>
 
             <div>
                 <Label htmlFor="destino">Aluno Destinatário</Label>

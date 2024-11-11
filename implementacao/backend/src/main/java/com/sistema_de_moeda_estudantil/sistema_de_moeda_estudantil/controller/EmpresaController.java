@@ -26,8 +26,6 @@ import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.service.Empre
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.service.FuncionarioEmpresaService;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.service.VantagemService;
 
-import jakarta.annotation.security.RolesAllowed;
-
 @RestController
 @RequestMapping("/empresas")
 public class EmpresaController {
@@ -41,14 +39,12 @@ public class EmpresaController {
     @Autowired
     private VantagemService vantagemService;
 
-    @RolesAllowed({ "ROLE_ADMIN" })
     @GetMapping
     public List<EmpresaDTO> obterTodasEmpresas() {
         return empresaService.listarTodas();
     }
 
     @GetMapping("/{id}")
-    @RolesAllowed({ "ROLE_EMPRESA" })
     public ResponseEntity<EmpresaDTO> obterEmpresaPorId(@PathVariable Long id) {
         Optional<EmpresaDTO> empresaDTO = empresaService.buscarPorId(id);
         return empresaDTO.map(ResponseEntity::ok)
@@ -62,7 +58,8 @@ public class EmpresaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<EmpresaDTO> atualizarEmpresa(@PathVariable Long id, @RequestBody EmpresaCreate empresaCreate) {
+    public ResponseEntity<EmpresaDTO> atualizarEmpresa(@PathVariable Long id,
+            @RequestBody EmpresaCreate empresaCreate) {
         Optional<EmpresaDTO> empresaAtualizada = empresaService.atualizar(id, empresaCreate);
         return empresaAtualizada.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());

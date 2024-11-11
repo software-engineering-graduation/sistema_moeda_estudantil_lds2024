@@ -2,6 +2,7 @@ package com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.repository;
 
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.entity.Vantagem;
@@ -39,4 +40,6 @@ public interface VantagemRepository extends JpaRepository<Vantagem, Long> {
      * @return true if the vantagem exists, false otherwise
      */
     boolean existsByIdAndEmpresaId(Long id, Long empresaId);
+
+    List<Vantagem> findByQuantidadeDisponivelGreaterThan(int i);
 }

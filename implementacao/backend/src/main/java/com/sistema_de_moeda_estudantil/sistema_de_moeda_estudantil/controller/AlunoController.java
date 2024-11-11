@@ -46,12 +46,14 @@ public class AlunoController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<AlunoDTO> criarAluno(@Valid @RequestBody AlunoCreate alunoCreate) {
         AlunoDTO alunoDTO = alunoService.salvar(alunoCreate);
         return ResponseEntity.status(HttpStatus.CREATED).body(alunoDTO);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<AlunoDTO> atualizarAluno(@PathVariable Long id, @Valid @RequestBody AlunoDTO alunoCreate) {
         Optional<AlunoDTO> alunoAtualizado = alunoService.atualizar(id, alunoCreate);
         return alunoAtualizado.map(ResponseEntity::ok)
@@ -59,12 +61,14 @@ public class AlunoController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deletarAluno(@PathVariable Long id) {
         alunoService.deletarPorId(id);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}/senha")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<AlunoDTO> atualizarSenha(@PathVariable Long id, @RequestBody SenhaDTO senhaDTO) {
         Optional<AlunoDTO> alunoAtualizado = alunoService.atualizarSenha(id, senhaDTO.getSenhaAntiga(), senhaDTO.getNovaSenha());
         return alunoAtualizado.map(ResponseEntity::ok)
@@ -72,6 +76,7 @@ public class AlunoController {
     }
 
     @GetMapping("/{id}/transacoes")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<TransacaoDTO>> obterTransacoes(@PathVariable Long id) {
         List<TransacaoDTO> transacoes = alunoService.listarTransacoes(id);
         return ResponseEntity.ok(transacoes);

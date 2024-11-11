@@ -49,6 +49,7 @@ public class TransacaoService {
 
         return transacoes.stream()
                 .map(transacaoMapper::toDTO)
+                .sorted((t1, t2) -> t2.getData().compareTo(t1.getData()))
                 .collect(Collectors.toList());
     }
 
@@ -56,6 +57,9 @@ public class TransacaoService {
         Transacao transacao = transacaoMapper.toEntity(transacaoCreate);
         Usuario origem = usuarioRepository.findByEmail(authentication.getName())
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        if(!TipoUsuario.PROFESSOR.equals(origem.getTipo())) {
+            throw new RuntimeException("Apenas professores podem transferir moedas");
+        }
         Usuario destino = usuarioRepository.findById(transacaoCreate.getDestino())
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
         Double valor = transacao.getValor();
