@@ -1,0 +1,45 @@
+@startuml
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 20
+skinparam maxmessagesize 60
+skinparam sequenceParticipant underline
+
+actor "Funcionário" as employee
+participant "VantagemController" as controller
+participant "VantagemService" as service
+participant "EmpresaRepository" as empresaRepo
+participant "VantagemRepository" as vantagemRepo
+
+employee -> controller: POST /empresas/{empresaId}/vantagens\n(empresaId, vantagemCreate)
+activate controller
+
+controller -> service: create(empresaId, vantagemCreate)
+activate service
+
+service -> empresaRepo: findById(empresaId)
+activate empresaRepo
+
+alt Empresa encontrada
+    empresaRepo --> service: empresa
+else Empresa não encontrada
+    empresaRepo --> service: EntityNotFoundException
+    service --> controller: "Empresa não encontrada"
+    controller --> employee: 404 Not Found
+    destroy service
+end
+deactivate empresaRepo
+
+service -> service: vantagem.setEmpresa(empresa)
+
+service -> vantagemRepo: save(vantagem)
+activate vantagemRepo
+vantagemRepo --> service: vantagem salva
+deactivate vantagemRepo
+
+service --> controller: VantagemDTO
+deactivate service
+
+controller --> employee: 201 Created\nVantagemDTO
+deactivate controller
+
+@enduml

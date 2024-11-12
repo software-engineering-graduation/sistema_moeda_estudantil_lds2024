@@ -79,9 +79,9 @@ export default function ListaVantagens() {
                                 <Button onClick={() => navigate(`/empresas/${empresaId}/vantagens/${vantagem.id}`)} className="mr-2">
                                     Editar
                                 </Button>
-                                <Button variant="destructive" onClick={() => excluirMutacao.mutate(vantagem.id)}>
+                                {/* <Button variant="destructive" onClick={() => excluirMutacao.mutate(vantagem.id)}>
                                     Excluir
-                                </Button>
+                                </Button> */}
                             </TableCell>
                         </TableRow>
                     ))}

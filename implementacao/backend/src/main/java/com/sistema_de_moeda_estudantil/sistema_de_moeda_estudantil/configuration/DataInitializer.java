@@ -56,7 +56,7 @@ public class DataInitializer implements CommandLineRunner {
         Usuario admin = new Usuario();
 
         admin.setEmail("admin");
-        admin.setSenha("$2a$15$RWQ4HVbd3VaJRQUoBRnn4.PonJYVy6shhXmufg/n3JxnIaD83dmDy");
+        admin.setSenha("$2a$15$b3p7lCvC6sn/EgEakqKtoOUxONvePNn.nvxoqIP8zkAE9tPZQ8IOu");
         admin.setNome("Administrador");
         admin.setTipo(TipoUsuario.ADMIN);
         userRepository.save(admin);
@@ -105,7 +105,7 @@ public class DataInitializer implements CommandLineRunner {
         // Adding two more students for the second institution
         Aluno aluno3 = new Aluno();
         aluno3.setNome("Grace Hopper");
-        aluno3.setSenha("abcdef");
+        aluno3.setSenha("$2a$15$b3p7lCvC6sn/EgEakqKtoOUxONvePNn.nvxoqIP8zkAE9tPZQ8IOu");
         aluno3.setEmail("grace.hopper@email.com");
         aluno3.setCpf("321.654.987-00");
         aluno3.setRg("32.165.498-7");
@@ -118,7 +118,7 @@ public class DataInitializer implements CommandLineRunner {
 
         Aluno aluno4 = new Aluno();
         aluno4.setNome("Margaret Hamilton");
-        aluno4.setSenha("7891011");
+        aluno4.setSenha("$2a$15$b3p7lCvC6sn/EgEakqKtoOUxONvePNn.nvxoqIP8zkAE9tPZQ8IOu");
         aluno4.setEmail("margaret.hamilton@email.com");
         aluno4.setCpf("654.321.987-00");
         aluno4.setRg("65.432.198-7");
@@ -140,31 +140,35 @@ public class DataInitializer implements CommandLineRunner {
     private void addFuncionarios() {
         FuncionarioEmpresa funcionario1 = new FuncionarioEmpresa();
         funcionario1.setNome("Linus Torvalds");
-        funcionario1.setSenha("senha123");
+        funcionario1.setSenha("$2a$15$b3p7lCvC6sn/EgEakqKtoOUxONvePNn.nvxoqIP8zkAE9tPZQ8IOu");
         funcionario1.setEmail("linus.torvalds@techsolutions.com");
         funcionario1.setEmpresa(empresaRepository.findAll().get(0)); // First company
+        funcionario1.setTipo(TipoUsuario.EMPRESA);
         funcionarioEmpresaRepository.save(funcionario1);
 
         FuncionarioEmpresa funcionario2 = new FuncionarioEmpresa();
         funcionario2.setNome("Guido van Rossum");
-        funcionario2.setSenha("senha456");
+        funcionario2.setSenha("$2a$15$b3p7lCvC6sn/EgEakqKtoOUxONvePNn.nvxoqIP8zkAE9tPZQ8IOu");
         funcionario2.setEmail("guido.vanrossum@techsolutions.com");
         funcionario2.setEmpresa(empresaRepository.findAll().get(0)); // First company
+        funcionario2.setTipo(TipoUsuario.EMPRESA);
         funcionarioEmpresaRepository.save(funcionario2);
 
         // Adding two more employees for the second company
         FuncionarioEmpresa funcionario3 = new FuncionarioEmpresa();
         funcionario3.setNome("James Gosling");
-        funcionario3.setSenha("senha789");
+        funcionario3.setSenha("$2a$15$b3p7lCvC6sn/EgEakqKtoOUxONvePNn.nvxoqIP8zkAE9tPZQ8IOu");
         funcionario3.setEmail("james.gosling@techsolutions.com");
         funcionario3.setEmpresa(empresaRepository.findAll().get(0)); // Second company
+        funcionario3.setTipo(TipoUsuario.EMPRESA);
         funcionarioEmpresaRepository.save(funcionario3);
 
         FuncionarioEmpresa funcionario4 = new FuncionarioEmpresa();
         funcionario4.setNome("Bjarne Stroustrup");
-        funcionario4.setSenha("senha101");
+        funcionario4.setSenha("$2a$15$b3p7lCvC6sn/EgEakqKtoOUxONvePNn.nvxoqIP8zkAE9tPZQ8IOu");
         funcionario4.setEmail("bjarne.stroustrup@techsolutions.com");
         funcionario4.setEmpresa(empresaRepository.findAll().get(0)); // Second company
+        funcionario4.setTipo(TipoUsuario.EMPRESA);
         funcionarioEmpresaRepository.save(funcionario4);
     }
 

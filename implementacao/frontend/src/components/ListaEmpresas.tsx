@@ -8,6 +8,7 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table'
+import { useAuth } from '@/contexts/AuthContext'
 import { useToast } from "@/hooks/use-toast"
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
@@ -39,6 +40,7 @@ export default function ListaEmpresas() {
     const { toast } = useToast()
     const navigate = useNavigate()
     const queryClient = useQueryClient()
+    const { user } = useAuth()
 
     const excluirMutacao = useMutation({
         mutationFn: excluirEmpresa,
@@ -70,25 +72,31 @@ export default function ListaEmpresas() {
         columnHelper.accessor('id', {
             cell: info => (
                 <div className="space-x-2">
-                    <Button onClick={() => navigate(`/empresas/${info.getValue()}`)}>
-                        Editar
-                    </Button>
-                    <Button onClick={() => navigate(`/empresas/${info.getValue()}/funcionarios`)}>
-                        Gerenciar Funcionários
-                    </Button>
+                    {user?.tipo === 'ADMIN' && (
+                        <>
+                            <Button onClick={() => navigate(`/empresas/${info.getValue()}`)}>
+                                Editar
+                            </Button>
+                            <Button onClick={() => navigate(`/empresas/${info.getValue()}/funcionarios`)}>
+                                Gerenciar Funcionários
+                            </Button>
+                        </>
+                    )}
                     <Button onClick={() => navigate(`/empresas/${info.getValue()}/vantagens`)}>
                         Gerenciar Vantagens
                     </Button>
-                    <Button
-                        variant="destructive"
-                        onClick={() => {
-                            if (window.confirm('Tem certeza que deseja excluir esta empresa?')) {
-                                excluirMutacao.mutate(info.getValue())
-                            }
-                        }}
-                    >
-                        Excluir
-                    </Button>
+                    {user?.tipo === 'ADMIN' && (
+                        <Button
+                            variant="destructive"
+                            onClick={() => {
+                                if (window.confirm('Tem certeza que deseja excluir esta empresa?')) {
+                                    excluirMutacao.mutate(info.getValue())
+                                }
+                            }}
+                        >
+                            Excluir
+                        </Button>
+                    )}
                 </div>
             ),
             header: () => <span>Ações</span>,

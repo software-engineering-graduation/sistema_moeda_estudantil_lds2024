@@ -37,8 +37,10 @@ const AppContent: React.FC = () => {
                                 {user?.tipo === 'ADMIN' && (
                                     <>
                                         <li><Link to="/alunos"><Button>Alunos</Button></Link></li>
-                                        <li><Link to="/empresas"><Button>Empresas</Button></Link></li>
                                     </>
+                                )}
+                                {(user?.tipo === 'ADMIN' || user?.tipo === 'EMPRESA') && (
+                                    <li><Link to="/empresas"><Button>Empresas</Button></Link></li>
                                 )}
                                 {(user?.tipo === 'ALUNO') && (
                                     <li>
@@ -47,7 +49,9 @@ const AppContent: React.FC = () => {
                                         </Link>
                                     </li>
                                 )}
-                                <li><Link to="/transacoes"><Button>Transações</Button></Link></li>
+                                {user?.tipo !== 'EMPRESA' && (
+                                    <li><Link to="/transacoes"><Button>Transações</Button></Link></li>
+                                )}
                             </ul>
                             <div className="flex items-center space-x-4">
                                 <div className="text-sm">

@@ -1,0 +1,29 @@
+@startuml
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 20
+skinparam maxmessagesize 60
+skinparam sequenceParticipant underline
+
+actor "Aluno" as student
+participant "VantagemController" as controller
+participant "VantagemService" as service
+participant "VantagemRepository" as vantagemRepo
+
+student -> controller: GET /vantagens
+activate controller
+
+controller -> service: getByAllAvailable()
+activate service
+
+service -> vantagemRepo: findByQuantidadeDisponivelGreaterThan(0)
+activate vantagemRepo
+vantagemRepo --> service: List<Vantagem>
+deactivate vantagemRepo
+
+service --> controller: List<VantagemDTO>
+deactivate service
+
+controller --> student: 200 OK\nList<VantagemDTO>
+deactivate controller
+
+@enduml

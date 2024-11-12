@@ -9,8 +9,8 @@
 ## Modelo Entidade-Relacionamento
 ![Modelo Entidade-Relacionamento](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/software-engineering-graduation/sistema_moeda_estudantil_lds2024/main/projeto/modelo_er.puml)
 
-## Diagrama de sequencia - Resgate de vantagens
-![Modelo Entidade-Relacionamento](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/software-engineering-graduation/sistema_moeda_estudantil_lds2024/main/projeto/diagrama_de_sequencia_vantagens.puml)
+## Diagramas de sequencia
+[Diagramas de sequencia](./sequecia/doc.md)
 
 ## Diagrama de componentes
 ![Diagrama de componentes](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/software-engineering-graduation/sistema_moeda_estudantil_lds2024/main/projeto/diagrama_de_componentes.puml)
