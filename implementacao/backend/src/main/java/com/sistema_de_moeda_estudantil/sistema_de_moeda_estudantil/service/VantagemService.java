@@ -47,6 +47,9 @@ public class VantagemService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private EmailService emailService;
+
     private final VantagemMapper vantagemMapper = VantagemMapper.INSTANCE;
     private final CupomResgateMapper cupomResgateMapper = CupomResgateMapper.INSTANCE;
 
@@ -112,6 +115,12 @@ public class VantagemService {
         cupomResgate.setEmpresa(vantagem.getEmpresa());
         cupomResgate.setCodigo(generateCodigo());
         cupomResgate.setValor(vantagem.getCustoMoedas());
+
+        try {
+            emailService.sendCupomResgateEmails(cupomResgate);
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao enviar email");
+        }
 
         return cupomResgateMapper.toDTO(cupomResgateRepository.save(cupomResgate));
     }

@@ -20,6 +20,8 @@ public class Empresa{
 
     private Double saldoMoedas;
 
+    private String email;
+
     @OneToMany(mappedBy = "empresa", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Vantagem> vantagens;
 

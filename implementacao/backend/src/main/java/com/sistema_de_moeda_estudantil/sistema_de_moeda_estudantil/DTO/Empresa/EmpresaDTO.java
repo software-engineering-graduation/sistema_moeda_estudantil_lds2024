@@ -8,4 +8,5 @@ public class EmpresaDTO {
     private String nome;
     private String cnpj;
     private Long saldoMoedas;
+    private String email;
 }

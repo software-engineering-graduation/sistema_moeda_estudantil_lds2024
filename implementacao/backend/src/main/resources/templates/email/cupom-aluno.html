@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="color-scheme" content="light dark">
+    <meta name="supported-color-schemes" content="light dark">
+</head>
+
+<body
+    style="margin: 0; padding: 20px; background-color: #ffffff; color: #343a40; font-family: Arial, sans-serif; line-height: 1.6; max-width: 700px; margin: 0 auto;">
+    <div
+        style="text-align: center; margin-bottom: 30px; padding: 20px; background-color: #4a90e2; color: white; border-radius: 8px;">
+        <h1 style="margin: 0; font-size: 28px;">Seu Cupom de Resgate</h1>
+    </div>
+
+    <p style="color: #343a40;">Olá <span th:text="${aluno.nome}">Nome do Aluno</span>,</p>
+
+    <p style="color: #343a40;">Parabéns! Você resgatou um novo cupom. Utilize o código abaixo para aproveitar sua vantagem:</p>
+
+    <div
+        style="background-color: #f8f9fa; padding: 20px; margin: 20px 0; text-align: center; border-radius: 8px; border: 2px dashed #4a90e2;">
+        <div
+            style="font-size: 32px; font-weight: bold; color: #4a90e2; font-family: monospace; letter-spacing: 2px; margin: 10px 0;"
+            th:text="${codigo}">CÓDIGO</div>
+    </div>
+
+    <div
+        style="background-color: #ffffff; padding: 20px; border: 1px solid #e9ecef; border-radius: 8px; margin: 20px 0;">
+        <h2 style="color: #4a90e2; margin-top: 0; border-bottom: 2px solid #e9ecef; padding-bottom: 10px;">Detalhes do Cupom</h2>
+        <p><strong>Vantagem:</strong> <span th:text="${vantagem.nome}">Nome da Vantagem</span></p>
+        <p><strong>Empresa:</strong> <span th:text="${empresa.nome}">Nome da Empresa</span></p>
+        <p><strong>Valor:</strong> R$ <span th:text="${valor}">Valor</span></p>
+        <p><strong>Data do Resgate:</strong> <span th:text="${#dates.format(data, 'dd/MM/yyyy HH:mm')}">Data</span></p>
+    </div>
+
+    <p style="color: #343a40;">Apresente este cupom na empresa parceira para usufruir da sua vantagem. Em caso de dúvidas, entre em contato conosco.</p>
+
+    <div
+        style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 2px solid #e9ecef; color: #6c757d;">
+        <p style="font-size: 14px;">Este é um e-mail automático, por favor não responda.</p>
+    </div>
+</body>
+
+</html>

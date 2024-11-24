@@ -10,4 +10,7 @@ public class EmpresaCreate {
 
     @NotBlank(message = "O CNPJ é obrigatório")
     private String cnpj;
+
+    @NotBlank(message = "O email é obrigatório")
+    private String email;
 }
