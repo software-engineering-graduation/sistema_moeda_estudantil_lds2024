@@ -1,5 +1,9 @@
 package com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.entity;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -7,6 +11,7 @@ import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import jakarta.persistence.OneToMany;
 
 @Entity
 @Data
@@ -20,5 +25,10 @@ public class Instituicao {
 
     private String nome;
     private String endereco;
-}
 
+    @OneToMany(mappedBy = "instituicao")
+    private List<Semestre> semestres;
+
+    @OneToMany(mappedBy = "instituicao")
+    private List<Professor> professores;
+}

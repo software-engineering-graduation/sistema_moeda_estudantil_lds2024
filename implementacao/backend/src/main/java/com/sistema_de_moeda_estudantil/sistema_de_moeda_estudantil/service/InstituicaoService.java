@@ -4,6 +4,7 @@ package com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.service;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.DTO.instituicao.InstituicaoCreate;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.DTO.instituicao.InstituicaoDTO;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.entity.Instituicao;
+import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.entity.Semestre;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.mapper.InstituicaoMapper;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.repository.InstituicaoRepository;
 
@@ -11,6 +12,7 @@ import jakarta.persistence.EntityNotFoundException;
 
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -57,5 +59,24 @@ public class InstituicaoService {
         Instituicao instituicao = instituicaoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Instituição não encontrada com id: " + id));
         instituicaoRepository.delete(instituicao);
+    }
+
+    public void novoSemestre(Long instituicaoId) {
+        Instituicao instituicao = instituicaoRepository.getReferenceById(instituicaoId);
+        instituicao.getSemestres().getLast().setAtivo(false);
+        instituicao.getSemestres().getLast().setDataFim(LocalDateTime.now());
+
+        Semestre semestre = new Semestre();
+        semestre.setAtivo(true);
+        semestre.setDataInicio(LocalDateTime.now());
+        semestre.setDataFim(LocalDateTime.now().plusMonths(6));
+
+        instituicao.getSemestres().add(semestre);
+        adicionarSaldoDocentes(instituicaoId, Double.valueOf(1000));
+    }
+
+    public void adicionarSaldoDocentes(Long instituicaoId, Double saldo) {
+        Instituicao instituicao = instituicaoRepository.getReferenceById(instituicaoId);
+        instituicao.getProfessores().forEach(professor -> professor.setSaldoMoedas(professor.getSaldoMoedas() + saldo));
     }
 }

@@ -1,0 +1,7 @@
+services:
+  mailhog:
+    image: mailhog/mailhog
+    container_name: 'sistema_moedas_mailhog'
+    ports:
+      - "${SPRING_MAIL_PORT}:1025"
+      - "8025:8025"

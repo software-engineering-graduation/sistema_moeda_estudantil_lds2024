@@ -57,4 +57,11 @@ public class InstituicaoController {
         instituicaoService.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/{id}/novoSemestre")
+    public ResponseEntity<Void> novoSemestre(@PathVariable Long id) {
+        instituicaoService.novoSemestre(id);
+        return ResponseEntity.ok().build();
+    }
+    
 }

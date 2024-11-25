@@ -1,25 +1,33 @@
 package com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import java.time.LocalDateTime;
+
+import org.springframework.cglib.core.Local;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Data
-@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Professor extends Usuario {
+public class Semestre {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    private String cpf;
-    private String departamento;
+    private LocalDateTime dataInicio;
+
+    private LocalDateTime dataFim;
+
+    private Boolean ativo;
 
     @ManyToOne
     @JoinColumn(name = "instituicao_id")
