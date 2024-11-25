@@ -29,9 +29,9 @@
         style="background-color: #ffffff; padding: 20px; border: 1px solid #e9ecef; border-radius: 8px; margin: 20px 0;">
         <h2 style="color: #4a90e2; margin-top: 0; border-bottom: 2px solid #e9ecef; padding-bottom: 10px;">Detalhes do Cupom</h2>
         <p><strong>Aluno:</strong> <span th:text="${aluno.nome}">Nome do Aluno</span></p>
-        <p><strong>Vantagem:</strong> <span th:text="${vantagem.nome}">Nome da Vantagem</span></p>
+        <p><strong>Vantagem:</strong> <span th:text="${vantagem.descricao}">Nome da Vantagem</span></p>
         <p><strong>Valor:</strong> R$ <span th:text="${valor}">Valor</span></p>
-        <p><strong>Data do Resgate:</strong> <span th:text="${#dates.format(data, 'dd/MM/yyyy HH:mm')}">Data</span></p>
+        <p><strong>Data do Resgate:</strong> <span th:text="${data}">Data</span></p>
     </div>
 
     <p style="color: #343a40;">Por favor, esteja preparado para atender o aluno com este cupom. Em caso de dúvidas, entre em contato conosco.</p>

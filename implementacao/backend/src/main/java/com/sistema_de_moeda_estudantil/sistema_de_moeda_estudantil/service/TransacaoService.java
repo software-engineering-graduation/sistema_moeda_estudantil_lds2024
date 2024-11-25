@@ -33,6 +33,9 @@ public class TransacaoService {
     @Autowired
     private ProfessorRepository professorRepository;
 
+    @Autowired
+    private EmailService emailService;
+
     public List<TransacaoDTO> listarTransacoes(Authentication authentication) {
         Usuario usuario = usuarioRepository.findByEmail(authentication.getName())
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
@@ -72,7 +75,7 @@ public class TransacaoService {
         transacao.setData(LocalDateTime.now());
         transacao.setOrigem(origem);
         transacao.setDestino(destino);
-        transacaoRepository.save(transacao);
+        transacaoRepository.save(transacao);        
 
         return transacaoMapper.toDTO(transacao);
     }

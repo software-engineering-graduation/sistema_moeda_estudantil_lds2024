@@ -28,10 +28,10 @@
     <div
         style="background-color: #ffffff; padding: 20px; border: 1px solid #e9ecef; border-radius: 8px; margin: 20px 0;">
         <h2 style="color: #4a90e2; margin-top: 0; border-bottom: 2px solid #e9ecef; padding-bottom: 10px;">Detalhes do Cupom</h2>
-        <p><strong>Vantagem:</strong> <span th:text="${vantagem.nome}">Nome da Vantagem</span></p>
+        <p><strong>Vantagem:</strong> <span th:text="${vantagem.descricao}">Nome da Vantagem</span></p>
         <p><strong>Empresa:</strong> <span th:text="${empresa.nome}">Nome da Empresa</span></p>
         <p><strong>Valor:</strong> R$ <span th:text="${valor}">Valor</span></p>
-        <p><strong>Data do Resgate:</strong> <span th:text="${#dates.format(data, 'dd/MM/yyyy HH:mm')}">Data</span></p>
+        <p><strong>Data do Resgate:</strong> <span th:text="${data}">Data</span></p>
     </div>
 
     <p style="color: #343a40;">Apresente este cupom na empresa parceira para usufruir da sua vantagem. Em caso de dúvidas, entre em contato conosco.</p>

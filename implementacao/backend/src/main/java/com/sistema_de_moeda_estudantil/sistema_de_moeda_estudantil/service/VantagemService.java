@@ -7,6 +7,8 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailAuthenticationException;
+import org.springframework.mail.MailSendException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +29,7 @@ import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.repository.Em
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.repository.UsuarioRepository;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.repository.VantagemRepository;
 
+import jakarta.mail.MessagingException;
 import jakarta.persistence.EntityNotFoundException;
 
 @Service
@@ -118,8 +121,19 @@ public class VantagemService {
 
         try {
             emailService.sendCupomResgateEmails(cupomResgate);
+        } catch (MessagingException e) {
+            throw new RuntimeException(
+                    "Erro ao enviar email: Problema com o envio da mensagem. Detalhes: " + e.getMessage(), e);
+        } catch (MailAuthenticationException e) {
+            throw new RuntimeException(
+                    "Erro ao enviar email: Falha de autenticação no servidor SMTP. Verifique suas credenciais. Detalhes: "
+                            + e.getMessage(),
+                    e);
+        } catch (MailSendException e) {
+            throw new RuntimeException(
+                    "Erro ao enviar email: Falha ao conectar ou enviar o e-mail. Detalhes: " + e.getMessage(), e);
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao enviar email");
+            throw new RuntimeException("Erro inesperado ao enviar email. Detalhes: " + e.getMessage(), e);
         }
 
         return cupomResgateMapper.toDTO(cupomResgateRepository.save(cupomResgate));

@@ -143,15 +143,23 @@ public class EmailService {
         context.setVariable("codigo", cupomResgate.getCodigo());
         context.setVariable("vantagem", cupomResgate.getVantagem());
         context.setVariable("valor", cupomResgate.getValor());
-        context.setVariable("data", cupomResgate.getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
+        context.setVariable("data", cupomResgate.getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")).toString());
 
-        String alunoEmailContent = templateEngine.process("aluno_email_template", context);
-        // sendEmail(cupomResgate.getAluno().getEmail(), "Seu Cupom de Resgate",alunoEmailContent);
-        this.queueEmail(cupomResgate.getAluno().getEmail(), "Seu Cupom de Resgate", alunoEmailContent, null, null, null);
+        // Context context = new Context();
+        // context.setVariable("aluno", cupomResgate.getAluno().getNome());
+        // context.setVariable("codigo", cupomResgate.getCodigo());
+        // context.setVariable("vantagem", cupomResgate.getVantagem().getDescricao());
+        // context.setVariable("empresa", cupomResgate.getEmpresa().getNome());
+        // context.setVariable("valor", cupomResgate.getValor().toString());
+        // context.setVariable("data", cupomResgate.getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")).toString());
 
-        String empresaEmailContent = templateEngine.process("empresa_email_template", context);
-        // sendEmail(cupomResgate.getEmpresa().getEmail(), "Novo Cupom Resgatado", empresaEmailContent);
-        this.queueEmail(cupomResgate.getEmpresa().getEmail(), "Novo Cupom Resgatado", empresaEmailContent, null, null, null);
+        String alunoEmailContent = templateEngine.process("cupom-aluno", context);
+        this.queueEmail(cupomResgate.getAluno().getEmail(), "Seu Cupom de Resgate", alunoEmailContent, null, null,
+                null);
+
+        String empresaEmailContent = templateEngine.process("cupom-empresa", context);
+        this.queueEmail(cupomResgate.getEmpresa().getEmail(), "Novo Cupom Resgatado", empresaEmailContent, null, null,
+                null);
     }
 
 }

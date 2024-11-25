@@ -7,7 +7,7 @@ public class ThymeleafConfig {
 
     public TemplateEngine templateEngine() {
         ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
-        templateResolver.setPrefix("/templates/"); // Pasta onde estão os templates
+        templateResolver.setPrefix("/templates/email/");
         templateResolver.setSuffix(".html");
         templateResolver.setTemplateMode("HTML");
         templateResolver.setCharacterEncoding("UTF-8");
