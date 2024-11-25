@@ -31,6 +31,7 @@ import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.repository.Va
 
 import jakarta.mail.MessagingException;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 
 @Service
 public class VantagemService {
@@ -92,6 +93,7 @@ public class VantagemService {
         vantagemRepository.delete(vantagem);
     }
 
+    @Transactional
     public CupomResgateDTO resgatarVantagem(Long alunoId, Long vantagemId) {
         Aluno aluno = alunoRepository.findById(alunoId)
                 .orElseThrow(() -> new EntityNotFoundException("Aluno não encontrado"));
@@ -119,6 +121,8 @@ public class VantagemService {
         cupomResgate.setCodigo(generateCodigo());
         cupomResgate.setValor(vantagem.getCustoMoedas());
 
+        cupomResgateRepository.save(cupomResgate);
+
         try {
             emailService.sendCupomResgateEmails(cupomResgate);
         } catch (MessagingException e) {
@@ -136,7 +140,7 @@ public class VantagemService {
             throw new RuntimeException("Erro inesperado ao enviar email. Detalhes: " + e.getMessage(), e);
         }
 
-        return cupomResgateMapper.toDTO(cupomResgateRepository.save(cupomResgate));
+        return cupomResgateMapper.toDTO(cupomResgate);
     }
 
     private String generateCodigo() {

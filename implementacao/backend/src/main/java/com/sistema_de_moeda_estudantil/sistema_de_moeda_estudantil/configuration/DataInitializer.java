@@ -134,6 +134,7 @@ public class DataInitializer implements CommandLineRunner {
         Empresa empresa = new Empresa();
         empresa.setNome("Tech Solutions");
         empresa.setCnpj("12.345.678/0001-90");
+        empresa.setEmail("techsolutions@techsolutions.com");
         empresaRepository.save(empresa);
     }
 

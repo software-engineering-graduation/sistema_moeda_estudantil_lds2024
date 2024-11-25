@@ -42,15 +42,17 @@ public class EmailService {
     private final String fromEmail;
     private final Logger logger = LoggerFactory.getLogger(EmailService.class);
     private TemplateEngine templateEngine;
+    private final EmailServiceJustForTesting emailServiceJustForTesting;
 
     public EmailService(
             JavaMailSender mailSender,
             EmailEventRepository emailEventRepository,
-            @Value("${spring.mail.username}") String fromEmail) {
+            @Value("${spring.mail.username}") String fromEmail, EmailServiceJustForTesting emailServiceJustForTesting) {
         this.mailSender = mailSender;
         this.emailEventRepository = emailEventRepository;
         this.fromEmail = fromEmail;
         this.templateEngine = new ThymeleafConfig().templateEngine();
+        this.emailServiceJustForTesting = emailServiceJustForTesting;
     }
 
     @Transactional
@@ -70,7 +72,7 @@ public class EmailService {
         emailEventRepository.save(event);
     }
 
-    @Scheduled(fixedDelay = 10000) // every 60 seconds
+    @Scheduled(fixedDelay = 10) // every 60 seconds
     @Async
     @Transactional
     public void processEmails() {
@@ -145,21 +147,12 @@ public class EmailService {
         context.setVariable("valor", cupomResgate.getValor());
         context.setVariable("data", cupomResgate.getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")).toString());
 
-        // Context context = new Context();
-        // context.setVariable("aluno", cupomResgate.getAluno().getNome());
-        // context.setVariable("codigo", cupomResgate.getCodigo());
-        // context.setVariable("vantagem", cupomResgate.getVantagem().getDescricao());
-        // context.setVariable("empresa", cupomResgate.getEmpresa().getNome());
-        // context.setVariable("valor", cupomResgate.getValor().toString());
-        // context.setVariable("data", cupomResgate.getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")).toString());
-
         String alunoEmailContent = templateEngine.process("cupom-aluno", context);
-        this.queueEmail(cupomResgate.getAluno().getEmail(), "Seu Cupom de Resgate", alunoEmailContent, null, null,
-                null);
+        queueEmail(cupomResgate.getAluno().getEmail(), "Seu Cupom de Resgate", alunoEmailContent, null, null, null);
 
         String empresaEmailContent = templateEngine.process("cupom-empresa", context);
-        this.queueEmail(cupomResgate.getEmpresa().getEmail(), "Novo Cupom Resgatado", empresaEmailContent, null, null,
-                null);
+        queueEmail(cupomResgate.getEmpresa().getEmail(), "Novo Cupom Resgatado", empresaEmailContent, null, null, null);
+        emailServiceJustForTesting.sendEmail(cupomResgate.getEmpresa().getEmail(), "Seu Cupom de Resgate", empresaEmailContent);
     }
 
 }

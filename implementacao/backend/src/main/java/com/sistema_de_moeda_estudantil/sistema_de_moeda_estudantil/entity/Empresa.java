@@ -1,6 +1,7 @@
 package com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import java.util.List;
 
@@ -20,6 +21,8 @@ public class Empresa{
 
     private Double saldoMoedas;
 
+    @NotBlank
+    @Column(unique = true, nullable = false)
     private String email;
 
     @OneToMany(mappedBy = "empresa", cascade = CascadeType.ALL, orphanRemoval = true)
