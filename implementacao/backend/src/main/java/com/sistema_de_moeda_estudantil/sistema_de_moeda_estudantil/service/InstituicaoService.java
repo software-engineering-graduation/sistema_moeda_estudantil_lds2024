@@ -21,11 +21,13 @@ public class InstituicaoService {
 
     private final InstituicaoRepository instituicaoRepository;
     private final InstituicaoMapper instituicaoMapper;
+    private final SemestreService semestreService;
 
 
-    public InstituicaoService(InstituicaoRepository instituicaoRepository, InstituicaoMapper instituicaoMapper) {
+    public InstituicaoService(InstituicaoRepository instituicaoRepository, InstituicaoMapper instituicaoMapper, SemestreService semestreService) {
         this.instituicaoRepository = instituicaoRepository;
         this.instituicaoMapper = instituicaoMapper;
+        this.semestreService = semestreService;
     }
 
     public InstituicaoDTO getById(Long id) {
@@ -63,20 +65,22 @@ public class InstituicaoService {
 
     public void novoSemestre(Long instituicaoId) {
         Instituicao instituicao = instituicaoRepository.getReferenceById(instituicaoId);
-        instituicao.getSemestres().getLast().setAtivo(false);
-        instituicao.getSemestres().getLast().setDataFim(LocalDateTime.now());
 
-        Semestre semestre = new Semestre();
-        semestre.setAtivo(true);
-        semestre.setDataInicio(LocalDateTime.now());
-        semestre.setDataFim(LocalDateTime.now().plusMonths(6));
+        if(instituicao.getSemestres().size() > 0){        
+            instituicao.getSemestres().getLast().setAtivo(false);
+            instituicao.getSemestres().getLast().setDataFim(LocalDateTime.now());
+        }
 
+        Semestre semestre = semestreService.novo();
+        
         instituicao.getSemestres().add(semestre);
         adicionarSaldoDocentes(instituicaoId, Double.valueOf(1000));
+        instituicaoRepository.save(instituicao);
     }
 
     public void adicionarSaldoDocentes(Long instituicaoId, Double saldo) {
         Instituicao instituicao = instituicaoRepository.getReferenceById(instituicaoId);
         instituicao.getProfessores().forEach(professor -> professor.setSaldoMoedas(professor.getSaldoMoedas() + saldo));
+        instituicaoRepository.save(instituicao);
     }
 }
