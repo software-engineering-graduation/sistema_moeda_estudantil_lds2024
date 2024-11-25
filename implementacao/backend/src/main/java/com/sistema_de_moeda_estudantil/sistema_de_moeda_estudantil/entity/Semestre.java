@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 
 import org.springframework.cglib.core.Local;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -31,5 +33,6 @@ public class Semestre {
 
     @ManyToOne
     @JoinColumn(name = "instituicao_id")
+    @JsonManagedReference
     private Instituicao instituicao;
 }

@@ -23,5 +23,6 @@ public class Professor extends Usuario {
 
     @ManyToOne
     @JoinColumn(name = "instituicao_id")
+    @JsonManagedReference
     private Instituicao instituicao;
 }
