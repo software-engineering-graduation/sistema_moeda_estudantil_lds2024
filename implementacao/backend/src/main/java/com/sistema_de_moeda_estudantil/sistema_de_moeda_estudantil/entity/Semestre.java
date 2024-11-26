@@ -2,8 +2,6 @@ package com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.entity;
 
 import java.time.LocalDateTime;
 
-import org.springframework.cglib.core.Local;
-
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Entity;

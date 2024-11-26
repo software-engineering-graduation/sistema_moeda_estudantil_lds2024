@@ -1,6 +1,5 @@
 package com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;

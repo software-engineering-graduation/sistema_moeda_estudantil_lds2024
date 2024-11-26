@@ -33,9 +33,6 @@ public class TransacaoService {
     @Autowired
     private ProfessorRepository professorRepository;
 
-    @Autowired
-    private EmailService emailService;
-
     public List<TransacaoDTO> listarTransacoes(Authentication authentication) {
         Usuario usuario = usuarioRepository.findByEmail(authentication.getName())
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));

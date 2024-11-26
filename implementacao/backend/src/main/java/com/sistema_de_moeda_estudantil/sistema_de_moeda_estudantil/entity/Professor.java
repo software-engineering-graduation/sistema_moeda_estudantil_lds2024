@@ -1,6 +1,5 @@
 package com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Entity;
