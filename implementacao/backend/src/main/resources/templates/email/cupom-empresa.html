@@ -30,7 +30,12 @@
         <h2 style="color: #4a90e2; margin-top: 0; border-bottom: 2px solid #e9ecef; padding-bottom: 10px;">Detalhes do Cupom</h2>
         <p><strong>Aluno:</strong> <span th:text="${aluno.nome}">Nome do Aluno</span></p>
         <p><strong>Vantagem:</strong> <span th:text="${vantagem.descricao}">Nome da Vantagem</span></p>
-        <p><strong>Valor:</strong> R$ <span th:text="${valor}">Valor</span></p>
+        <p><strong>Valor:</strong> <span th:text="${valor}">Valor</span>
+            <span th:switch="${valor}">
+                <span th:case="1">moeda</span>
+                <span th:case="*">moedas</span>
+            </span>
+        </p>
         <p><strong>Data do Resgate:</strong> <span th:text="${data}">Data</span></p>
     </div>
 

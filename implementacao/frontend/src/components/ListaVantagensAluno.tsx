@@ -83,7 +83,9 @@ export default function ListaVantagensAluno() {
                 <h1 className="text-3xl font-bold">Vantagens Disponíveis</h1>
                 <div className="p-4 bg-secondary rounded-lg">
                     <span className="font-semibold">Saldo atual: </span>
-                    <span>{user?.saldoMoedas?.toFixed(2)} moedas</span>
+                    <span>
+                        {user?.saldoMoedas?.toFixed(2)} {user?.saldoMoedas === 1 ? 'moeda' : 'moedas'}
+                    </span>
                 </div>
             </div>
 
@@ -101,7 +103,9 @@ export default function ListaVantagensAluno() {
                             <CardTitle>{vantagem.descricao}</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <p className="font-semibold">Custo: {vantagem.custoMoedas} moedas</p>
+                            <p className="font-semibold">
+                                Custo: {vantagem.custoMoedas} {vantagem.custoMoedas === 1 ? 'moeda' : 'moedas'}
+                            </p>
                             <p>Quantidade disponível: {vantagem.quantidadeDisponivel}</p>
                         </CardContent>
                         <CardFooter>

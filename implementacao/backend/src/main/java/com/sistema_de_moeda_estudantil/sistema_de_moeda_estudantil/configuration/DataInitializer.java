@@ -186,16 +186,27 @@ public class DataInitializer implements CommandLineRunner {
         Vantagem vantagem2 = new Vantagem();
         vantagem2.setDescricao("Desconto de 20% em qualquer produto");
         vantagem2.setFoto(
-                "https://cdn.shopify.com/s/files/1/0817/7988/4088/articles/4XOfcVjU6L9Z0yxkgW0WeI_c472c5fd-a7d2-4075-ba11-944a3f40ceb4.jpg?v=1719388916&originalWidth=1848&originalHeight=782");
+                "https://images.unsplash.com/photo-1607083206968-13611e3d76db?q=80&w=1830&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
         vantagem2.setCustoMoedas(20.0);
         vantagem2.setQuantidadeDisponivel(50.0);
         vantagem2.setEmpresa(empresa);
 
+        Vantagem vantagem3 = new Vantagem();
+        vantagem3.setDescricao("Desconto de 1% em qualquer produto");
+        vantagem3.setFoto(
+                "https://images.unsplash.com/photo-1607083206968-13611e3d76db?q=80&w=1830&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+        vantagem3.setCustoMoedas(1.0);
+        vantagem3.setQuantidadeDisponivel(500.0);
+        vantagem3.setEmpresa(empresa);
+
+
         vantagens.add(vantagem1);
         vantagens.add(vantagem2);
+        vantagens.add(vantagem3);
 
         vantagemRepository.save(vantagem1);
         vantagemRepository.save(vantagem2);
+        vantagemRepository.save(vantagem3);
     }
 
     private void addProfessores() {
