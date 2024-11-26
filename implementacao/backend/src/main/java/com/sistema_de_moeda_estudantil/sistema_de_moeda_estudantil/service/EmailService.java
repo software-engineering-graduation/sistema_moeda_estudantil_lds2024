@@ -42,17 +42,15 @@ public class EmailService {
     private final String fromEmail;
     private final Logger logger = LoggerFactory.getLogger(EmailService.class);
     private TemplateEngine templateEngine;
-    private final EmailServiceJustForTesting emailServiceJustForTesting;
 
     public EmailService(
             JavaMailSender mailSender,
             EmailEventRepository emailEventRepository,
-            @Value("${spring.mail.username}") String fromEmail, EmailServiceJustForTesting emailServiceJustForTesting) {
+            @Value("${spring.mail.username}") String fromEmail) {
         this.mailSender = mailSender;
         this.emailEventRepository = emailEventRepository;
         this.fromEmail = fromEmail;
         this.templateEngine = new ThymeleafConfig().templateEngine();
-        this.emailServiceJustForTesting = emailServiceJustForTesting;
     }
 
     @Transactional
@@ -72,7 +70,7 @@ public class EmailService {
         emailEventRepository.save(event);
     }
 
-    @Scheduled(fixedDelay = 10) // every 60 seconds
+    @Scheduled(fixedDelay = 15000)
     @Async
     @Transactional
     public void processEmails() {
@@ -152,7 +150,6 @@ public class EmailService {
 
         String empresaEmailContent = templateEngine.process("cupom-empresa", context);
         queueEmail(cupomResgate.getEmpresa().getEmail(), "Novo Cupom Resgatado", empresaEmailContent, null, null, null);
-        emailServiceJustForTesting.sendEmail(cupomResgate.getEmpresa().getEmail(), "Seu Cupom de Resgate", empresaEmailContent);
     }
 
 }
