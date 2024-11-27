@@ -5,3 +5,22 @@ services:
     ports:
       - "${SPRING_MAIL_PORT}:1025"
       - "8025:8025"
+    networks:
+      app_network:
+        aliases:
+          - mailhog
+  devcontainer:
+    build: 
+      context: .
+      dockerfile: .devcontainer/Dockerfile
+    volumes:
+      - .:/workspaces/backend/:cached
+    command: sleep infinity
+    networks:
+      app_network:
+        aliases:
+          - devcontainer
+networks:
+  app_network:
+    driver: bridge
+
