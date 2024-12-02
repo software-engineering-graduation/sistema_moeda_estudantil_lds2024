@@ -15,6 +15,9 @@ import ListaTransacoes from "./ListaTransacoes";
 import FormularioTransacao from "./FormularioTransacao";
 import ListaVantagensAluno from "./ListaVantagensAluno";
 import InstitutionSemesters from "./InstitutionSemesters";
+import ProfessorList from "./ProfessorList";
+import InstitutionForm from "./InstitutionForm";
+import InstitutionList from "./InstitutionList";
 
 const AppContent: React.FC = () => {
     const { isAuthenticated, user, logout } = useAuth();
@@ -38,7 +41,7 @@ const AppContent: React.FC = () => {
                                 {user?.tipo === 'ADMIN' && (
                                     <>
                                         <li><Link to="/alunos"><Button>Alunos</Button></Link></li>
-                                        <li><Link to="/instituicoes/semestres"><Button>Instituições</Button></Link></li>
+                                        <li><Link to="/instituicoes"><Button>Instituições</Button></Link></li>
                                     </>
                                 )}
                                 {(user?.tipo === 'ADMIN' || user?.tipo === 'EMPRESA') && (
@@ -99,8 +102,15 @@ const AppContent: React.FC = () => {
                         <Route path="/empresas/:id/vantagens/:vantagemId" element={<ProtectedRoute><FormularioVantagem /></ProtectedRoute>} />
                     </Route>
                     <Route path="/transacoes" element={<ProtectedRoute><ListaTransacoes /></ProtectedRoute>} />
-                    <Route path="/vantagens" element={<ProtectedRoute><ListaVantagensAluno /></ProtectedRoute>}/>
-                    <Route path="/instituicoes/semestres" element={<ProtectedRoute><InstitutionSemesters /></ProtectedRoute>} />
+                    <Route path="/vantagens" element={<ProtectedRoute><ListaVantagensAluno /></ProtectedRoute>} />
+                    <Route path="/instituicoes">
+                        <Route index element={<ProtectedRoute><InstitutionList /></ProtectedRoute>} />
+                        <Route path="nova" element={<ProtectedRoute><InstitutionForm /></ProtectedRoute>} />
+                        <Route path=":id" element={<ProtectedRoute><InstitutionForm /></ProtectedRoute>} />
+                        <Route path="semestres" element={<ProtectedRoute><InstitutionSemesters /></ProtectedRoute>} />
+                        <Route path=":institutionId/semestres" element={<ProtectedRoute><InstitutionSemesters /></ProtectedRoute>} />
+                        <Route path=":institutionId/professores" element={<ProtectedRoute><ProfessorList /></ProtectedRoute>} />
+                    </Route>
                     <Route path="/transacoes/nova" element={<ProtectedRoute><FormularioTransacao /></ProtectedRoute>} />
                 </Routes>
             </main>

@@ -49,6 +49,8 @@ public class SecurityConfig {
         .authorizeHttpRequests(
             auth -> auth
                 .requestMatchers("/authenticate").permitAll()
+                // permit h2
+                .requestMatchers("/h2**").permitAll()
                 .anyRequest().authenticated())
         .httpBasic(Customizer.withDefaults())
         .cors(cors -> cors.configurationSource(corsConfigurationSource()))

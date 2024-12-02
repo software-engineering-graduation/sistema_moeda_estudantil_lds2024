@@ -2,6 +2,7 @@ package com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.controller;
 
 import java.util.List;
 
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.DTO.instituicao.InstituicaoCreate;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.DTO.instituicao.InstituicaoDTO;
+import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.DTO.instituicao.InstituicaoUpdate;
+import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.DTO.professor.ProfessorDTO;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.service.InstituicaoService;
 
 @RestController
@@ -45,9 +48,9 @@ public class InstituicaoController {
         return ResponseEntity.status(201).body(instituicaoDTO);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<InstituicaoDTO> update(@PathVariable Long id,
-            @RequestBody @Validated InstituicaoDTO updateDTO) {
+                                                 @RequestBody @Validated InstituicaoUpdate updateDTO) {
         InstituicaoDTO instituicaoDTO = instituicaoService.update(id, updateDTO);
         return ResponseEntity.ok(instituicaoDTO);
     }
@@ -62,6 +65,12 @@ public class InstituicaoController {
     public ResponseEntity<Void> novoSemestre(@PathVariable Long id) {
         instituicaoService.novoSemestre(id);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{id}/professores")
+    public ResponseEntity<List<ProfessorDTO>> getProfessores(@PathVariable Long id) {
+        List<ProfessorDTO> professores = instituicaoService.getProfessores(id);
+        return ResponseEntity.ok(professores);
     }
     
 }

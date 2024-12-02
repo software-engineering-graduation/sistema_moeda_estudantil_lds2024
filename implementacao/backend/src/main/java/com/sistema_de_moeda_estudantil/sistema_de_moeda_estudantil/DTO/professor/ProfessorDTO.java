@@ -8,7 +8,8 @@ import lombok.Data;
 public class ProfessorDTO {
     private Long id;
     private String nome;
+    private String email;
+    private Double saldoMoedas;
     private String departamento;
     private InstituicaoDTO instituicao;
-    private Double saldo;
 }

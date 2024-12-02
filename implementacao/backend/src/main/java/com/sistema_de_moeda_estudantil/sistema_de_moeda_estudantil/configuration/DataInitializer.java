@@ -95,7 +95,7 @@ public class DataInitializer implements CommandLineRunner {
         semestreRepository.save(semestre);
         semestreRepository.save(semestre2);
     }
-    
+
     private void addAlunos() {
         List<Instituicao> instituicoes = instituicaoRepository.findAll();
         Aluno aluno = new Aluno();
@@ -221,7 +221,6 @@ public class DataInitializer implements CommandLineRunner {
         vantagem3.setQuantidadeDisponivel(500.0);
         vantagem3.setEmpresa(empresa);
 
-
         vantagens.add(vantagem1);
         vantagens.add(vantagem2);
         vantagens.add(vantagem3);
@@ -253,7 +252,7 @@ public class DataInitializer implements CommandLineRunner {
         prof2.setDepartamento("Computação");
         prof2.setSaldoMoedas(1000.0);
         prof2.setTipo(TipoUsuario.PROFESSOR);
-        prof2.setInstituicao(instituicoes.get(0)); // First institution
+        prof2.setInstituicao(instituicoes.get(1)); // Second institution
         professorRepository.save(prof2);
     }
 
