@@ -5,6 +5,8 @@ services:
     ports:
       - "${SPRING_MAIL_PORT}:1025"
       - "8025:8025"
+    networks:
+      - sysvantagens-network
 
   db:
     image: postgres:13
@@ -20,3 +22,9 @@ services:
       - POSTGRES_USER=${SPRING_DATASOURCE_USERNAME}
       - POSTGRES_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
       - POSTGRES_DB=${SPRING_DATASOURCE_DBNAME}
+    networks:
+      - sysvantagens-network
+
+networks:
+  sysvantagens-network:
+    driver: bridge
