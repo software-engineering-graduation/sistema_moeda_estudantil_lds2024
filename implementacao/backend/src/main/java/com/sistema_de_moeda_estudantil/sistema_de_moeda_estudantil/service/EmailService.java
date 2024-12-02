@@ -70,7 +70,7 @@ public class EmailService {
         emailEventRepository.save(event);
     }
 
-    @Scheduled(fixedDelay = 15000)
+    @Scheduled(fixedDelay = 5000)
     @Async
     @Transactional
     public void processEmails() {

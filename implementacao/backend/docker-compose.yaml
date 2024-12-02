@@ -5,3 +5,26 @@ services:
     ports:
       - "${SPRING_MAIL_PORT}:1025"
       - "8025:8025"
+    networks:
+      - sysvantagens-network
+
+  db:
+    image: postgres:13
+    container_name: sysvantagens_db
+    restart: always
+    expose:
+      - "5432"
+    ports:
+      - "${SPRING_DATASOURCE_PORT}:5432"
+    env_file:
+      - ./.env
+    environment:
+      - POSTGRES_USER=${SPRING_DATASOURCE_USERNAME}
+      - POSTGRES_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
+      - POSTGRES_DB=${SPRING_DATASOURCE_DBNAME}
+    networks:
+      - sysvantagens-network
+
+networks:
+  sysvantagens-network:
+    driver: bridge
