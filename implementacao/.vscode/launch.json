@@ -1,0 +1,39 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "command": "yarn dev",
+            "name": "Launch Vite App",
+            "request": "launch",
+            "type": "node-terminal",
+            "cwd": "${workspaceFolder}/frontend",
+        },
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Launch Chrome against localhost",
+            "url": "http://localhost:5173",
+            "webRoot": "${workspaceFolder}",
+            "cwd": "${workspaceFolder}/frontend"
+        },
+        {
+            "type": "java",
+            "name": "SistemaDeMoedaEstudantilApplication",
+            "request": "launch",
+            "mainClass": "com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.SistemaDeMoedaEstudantilApplication",
+            "projectName": "sistema-de-moeda-estudantil",
+            "cwd": "${workspaceFolder}/backend",
+            "envFile": "${workspaceFolder}/backend/.env"
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Run App",
+            "configurations": [
+                "Launch Vite App",
+                "Launch Chrome against localhost",
+                "SistemaDeMoedaEstudantilApplication"
+            ]
+        }
+    ]
+}

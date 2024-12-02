@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Service;
 
+import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.entity.Instituicao;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.entity.Semestre;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.repository.SemestreRepository;
 
@@ -15,11 +16,12 @@ public class SemestreService {
         this.semestreRepository = semestreRepository;
     }
 
-    public Semestre novo() {
+    public Semestre novo(Instituicao instituicao) {
         Semestre semestre = new Semestre();
         semestre.setAtivo(true);
         semestre.setDataInicio(LocalDateTime.now());
         semestre.setDataFim(LocalDateTime.now().plusMonths(6));
+        semestre.setInstituicao(instituicao);
         return semestreRepository.save(semestre);
     }
 }
