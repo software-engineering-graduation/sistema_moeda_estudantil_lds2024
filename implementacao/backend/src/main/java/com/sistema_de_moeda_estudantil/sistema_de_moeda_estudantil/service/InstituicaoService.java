@@ -71,7 +71,7 @@ public class InstituicaoService {
             instituicao.getSemestres().getLast().setDataFim(LocalDateTime.now());
         }
 
-        Semestre semestre = semestreService.novo();
+        Semestre semestre = semestreService.novo(instituicao);
         
         instituicao.getSemestres().add(semestre);
         adicionarSaldoDocentes(instituicaoId, Double.valueOf(1000));

@@ -11,19 +11,21 @@ import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.entity.Aluno;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.entity.Empresa;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.entity.FuncionarioEmpresa;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.entity.Instituicao;
-import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.entity.Usuario;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.entity.Professor;
+import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.entity.Semestre;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.entity.Transacao;
+import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.entity.Usuario;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.entity.Vantagem;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.enums.TipoUsuario;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.repository.AlunoRepository;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.repository.EmpresaRepository;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.repository.FuncionarioEmpresaRepository;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.repository.InstituicaoRepository;
+import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.repository.ProfessorRepository;
+import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.repository.SemestreRepository;
+import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.repository.TransacaoRepository;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.repository.UserRepository;
 import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.repository.VantagemRepository;
-import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.repository.ProfessorRepository;
-import com.sistema_de_moeda_estudantil.sistema_de_moeda_estudantil.repository.TransacaoRepository;
 
 import lombok.AllArgsConstructor;
 
@@ -39,11 +41,13 @@ public class DataInitializer implements CommandLineRunner {
     private FuncionarioEmpresaRepository funcionarioEmpresaRepository;
     private ProfessorRepository professorRepository;
     private TransacaoRepository transacaoRepository;
+    private SemestreRepository semestreRepository;
 
     @Override
     public void run(String... args) throws Exception {
         createAdmin();
         addInstituicoes();
+        addSemestres();
         addProfessores();
         addAlunos();
         addEmpresas();
@@ -74,6 +78,24 @@ public class DataInitializer implements CommandLineRunner {
         instituicaoRepository.save(instituicao2);
     }
 
+    private void addSemestres() {
+        List<Instituicao> instituicoes = instituicaoRepository.findAll();
+        Semestre semestre = new Semestre();
+        semestre.setDataInicio(LocalDateTime.now());
+        semestre.setDataFim(LocalDateTime.now().plusMonths(6));
+        semestre.setAtivo(true);
+        semestre.setInstituicao(instituicoes.get(0)); // First institution
+
+        Semestre semestre2 = new Semestre();
+        semestre2.setDataInicio(LocalDateTime.now());
+        semestre2.setDataFim(LocalDateTime.now().plusMonths(6));
+        semestre2.setAtivo(true);
+        semestre2.setInstituicao(instituicoes.get(1)); // Second institution
+
+        semestreRepository.save(semestre);
+        semestreRepository.save(semestre2);
+    }
+    
     private void addAlunos() {
         List<Instituicao> instituicoes = instituicaoRepository.findAll();
         Aluno aluno = new Aluno();

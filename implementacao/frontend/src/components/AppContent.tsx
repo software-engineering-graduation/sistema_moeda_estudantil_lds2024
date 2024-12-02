@@ -14,6 +14,7 @@ import StudentList from "./StudentList";
 import ListaTransacoes from "./ListaTransacoes";
 import FormularioTransacao from "./FormularioTransacao";
 import ListaVantagensAluno from "./ListaVantagensAluno";
+import InstitutionSemesters from "./InstitutionSemesters";
 
 const AppContent: React.FC = () => {
     const { isAuthenticated, user, logout } = useAuth();
@@ -37,6 +38,7 @@ const AppContent: React.FC = () => {
                                 {user?.tipo === 'ADMIN' && (
                                     <>
                                         <li><Link to="/alunos"><Button>Alunos</Button></Link></li>
+                                        <li><Link to="/instituicoes/semestres"><Button>Instituições</Button></Link></li>
                                     </>
                                 )}
                                 {(user?.tipo === 'ADMIN' || user?.tipo === 'EMPRESA') && (
@@ -97,14 +99,8 @@ const AppContent: React.FC = () => {
                         <Route path="/empresas/:id/vantagens/:vantagemId" element={<ProtectedRoute><FormularioVantagem /></ProtectedRoute>} />
                     </Route>
                     <Route path="/transacoes" element={<ProtectedRoute><ListaTransacoes /></ProtectedRoute>} />
-                    <Route
-                        path="/vantagens"
-                        element={
-                            <ProtectedRoute>
-                                <ListaVantagensAluno />
-                            </ProtectedRoute>
-                        }
-                    />
+                    <Route path="/vantagens" element={<ProtectedRoute><ListaVantagensAluno /></ProtectedRoute>}/>
+                    <Route path="/instituicoes/semestres" element={<ProtectedRoute><InstitutionSemesters /></ProtectedRoute>} />
                     <Route path="/transacoes/nova" element={<ProtectedRoute><FormularioTransacao /></ProtectedRoute>} />
                 </Routes>
             </main>
