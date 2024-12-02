@@ -1,6 +1,5 @@
 // src/components/ProfessorList.tsx
 import api from '@/api'
-import { Button } from '@/components/ui/button'
 import {
     Table,
     TableBody,
@@ -10,7 +9,7 @@ import {
     TableRow,
 } from '@/components/ui/table'
 import { useQuery } from '@tanstack/react-query'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 
 interface Professor {
     id: number
@@ -26,7 +25,6 @@ const getProfessors = async (institutionId: string) => {
 
 export default function ProfessorList() {
     const { institutionId } = useParams<{ institutionId: string }>()
-    const navigate = useNavigate()
     const { data: professors = [], isLoading, error } = useQuery<Professor[]>({
         queryKey: ['professors', institutionId],
         queryFn: async () => getProfessors(institutionId!),
