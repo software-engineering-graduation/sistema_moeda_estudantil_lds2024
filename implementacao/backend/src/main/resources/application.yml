@@ -6,22 +6,27 @@ spring:
     import: optional:file:.env[.properties]
     
   jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
     properties:
+      dialect: org.hibernate.dialect.PostgreSQLDialect
       hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
+        use-new-id-generator-mappings: true
+        jdbc:
+          batch_size: 25
+          lob:
+            non_contextual_creation: true
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
 
   datasource:
-    url: jdbc:h2:mem:testdb
-    driver-class-name: org.h2.Driver
-    username: sa
-    password: 
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
+    url: jdbc:postgresql://${SPRING_DATASOURCE_HOSTNAME}:${SPRING_DATASOURCE_PORT}/${SPRING_DATASOURCE_DBNAME}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      auto-commit: false
+      maximum-pool-size: 5
+      minimum-idle: 1
 
   mail:
     host: ${SPRING_MAIL_HOST}
@@ -57,3 +62,21 @@ jwt:
     key: classpath:app.key
   public:
     key: classpath:app.pub
+
+  # jpa:
+  #   hibernate:
+  #     ddl-auto: update
+  #   show-sql: true
+  #   properties:
+  #     hibernate:
+  #       dialect: org.hibernate.dialect.H2Dialect
+
+  # datasource:
+  #   url: jdbc:h2:mem:testdb
+  #   driver-class-name: org.h2.Driver
+  #   username: sa
+  #   password: 
+  # h2:
+  #   console:
+  #     enabled: true
+  #     path: /h2-console
